@@ -1,46 +1,43 @@
 /* =========================================================
    Tap & Roar — logic
-   No external audio/image files: animals are emoji, sounds
-   are synthesized live with the Web Audio API. That sidesteps
-   licensing, load time, and the "does the file exist" problem
-   entirely — and it means every animal can share one tiny,
-   consistent sound design instead of 26 mismatched clips.
+   Animals are emoji; sounds are short MP3 clips from Pixabay
+   (royalty-free via Pixabay — https://pixabay.com/sound-effects/)
+   Web Audio API so key-mashing can overlap cleanly.
    ========================================================= */
 
 (function () {
   "use strict";
 
-  // ---- Letter -> animal + a short, spam-safe sound recipe ----
-  // freq: base pitch (a C-major-pentatonic ladder, so any two
-  // notes played together still sound pleasant, not clashing).
-  // wave: oscillator color, grouped loosely by animal "size".
+  const MAX_SOUND_SEC = 4;
+
+  // ---- Letter -> animal + Pixabay sound clip (bundled in sounds/) ----
   const ANIMALS = [
-    { letter: "A", name: "Alligator",   emoji: "🐊", freq: 196.0, wave: "sawtooth" },
-    { letter: "B", name: "Bear",        emoji: "🐻", freq: 220.0, wave: "triangle" },
-    { letter: "C", name: "Cat",         emoji: "🐱", freq: 392.0, wave: "sine"     },
-    { letter: "D", name: "Dog",         emoji: "🐶", freq: 261.6, wave: "square"   },
-    { letter: "E", name: "Elephant",    emoji: "🐘", freq: 130.8, wave: "sawtooth" },
-    { letter: "F", name: "Fox",         emoji: "🦊", freq: 349.2, wave: "triangle" },
-    { letter: "G", name: "Giraffe",     emoji: "🦒", freq: 293.7, wave: "sine"     },
-    { letter: "H", name: "Horse",       emoji: "🐴", freq: 246.9, wave: "square"   },
-    { letter: "I", name: "Iguana",      emoji: "🦎", freq: 329.6, wave: "triangle" },
-    { letter: "J", name: "Jellyfish",   emoji: "🪼", freq: 440.0, wave: "sine"     },
-    { letter: "K", name: "Koala",       emoji: "🐨", freq: 261.6, wave: "triangle" },
-    { letter: "L", name: "Lion",        emoji: "🦁", freq: 174.6, wave: "sawtooth" },
-    { letter: "M", name: "Monkey",      emoji: "🐵", freq: 392.0, wave: "square"   },
-    { letter: "N", name: "Narwhal",     emoji: "🐋", freq: 196.0, wave: "sine"     },
-    { letter: "O", name: "Owl",         emoji: "🦉", freq: 293.7, wave: "sine"     },
-    { letter: "P", name: "Penguin",     emoji: "🐧", freq: 349.2, wave: "square"   },
-    { letter: "Q", name: "Quokka",      emoji: "🐹", freq: 440.0, wave: "triangle" },
-    { letter: "R", name: "Rabbit",      emoji: "🐰", freq: 523.3, wave: "sine"     },
-    { letter: "S", name: "Snake",       emoji: "🐍", freq: 220.0, wave: "sawtooth" },
-    { letter: "T", name: "Tiger",       emoji: "🐯", freq: 174.6, wave: "square"   },
-    { letter: "U", name: "Unicorn",     emoji: "🦄", freq: 523.3, wave: "sine"     },
-    { letter: "V", name: "Vampire Bat", emoji: "🦇", freq: 293.7, wave: "sawtooth" },
-    { letter: "W", name: "Walrus",      emoji: "🦭", freq: 155.6, wave: "triangle" },
-    { letter: "X", name: "X-ray Fish",  emoji: "🐠", freq: 392.0, wave: "triangle" },
-    { letter: "Y", name: "Yak",         emoji: "🐃", freq: 196.0, wave: "square"   },
-    { letter: "Z", name: "Zebra",       emoji: "🦓", freq: 246.9, wave: "sawtooth" }
+    { letter: "A", name: "Alligator",   emoji: "🐊", sound: "sounds/a-alligator.mp3" },
+    { letter: "B", name: "Bear",        emoji: "🐻", sound: "sounds/b-bear.mp3" },
+    { letter: "C", name: "Cat",         emoji: "🐱", sound: "sounds/c-cat.mp3" },
+    { letter: "D", name: "Dog",         emoji: "🐶", sound: "sounds/d-dog.mp3" },
+    { letter: "E", name: "Elephant",    emoji: "🐘", sound: "sounds/e-elephant.mp3" },
+    { letter: "F", name: "Fox",         emoji: "🦊", sound: "sounds/f-fox.mp3" },
+    { letter: "G", name: "Giraffe",     emoji: "🦒", sound: "sounds/g-giraffe.mp3" },
+    { letter: "H", name: "Horse",       emoji: "🐴", sound: "sounds/h-horse.mp3" },
+    { letter: "I", name: "Iguana",      emoji: "🦎", sound: "sounds/i-iguana.mp3" },
+    { letter: "J", name: "Jellyfish",   emoji: "🪼", sound: "sounds/j-jellyfish.mp3" },
+    { letter: "K", name: "Koala",       emoji: "🐨", sound: "sounds/k-koala.mp3" },
+    { letter: "L", name: "Lion",        emoji: "🦁", sound: "sounds/l-lion.mp3" },
+    { letter: "M", name: "Monkey",      emoji: "🐵", sound: "sounds/m-monkey.mp3" },
+    { letter: "N", name: "Narwhal",     emoji: "🐋", sound: "sounds/n-narwhal.mp3" },
+    { letter: "O", name: "Owl",         emoji: "🦉", sound: "sounds/o-owl.mp3" },
+    { letter: "P", name: "Penguin",     emoji: "🐧", sound: "sounds/p-penguin.mp3" },
+    { letter: "Q", name: "Quokka",      emoji: "🐹", sound: "sounds/q-quokka.mp3" },
+    { letter: "R", name: "Rabbit",      emoji: "🐰", sound: "sounds/r-rabbit.mp3" },
+    { letter: "S", name: "Snake",       emoji: "🐍", sound: "sounds/s-snake.mp3" },
+    { letter: "T", name: "Tiger",       emoji: "🐯", sound: "sounds/t-tiger.mp3" },
+    { letter: "U", name: "Unicorn",     emoji: "🦄", sound: "sounds/u-unicorn.mp3" },
+    { letter: "V", name: "Vampire Bat", emoji: "🦇", sound: "sounds/v-bat.mp3" },
+    { letter: "W", name: "Walrus",      emoji: "🦭", sound: "sounds/w-walrus.mp3" },
+    { letter: "X", name: "X-ray Fish",  emoji: "🐠", sound: "sounds/x-fish.mp3" },
+    { letter: "Y", name: "Yak",         emoji: "🐃", sound: "sounds/y-yak.mp3" },
+    { letter: "Z", name: "Zebra",       emoji: "🦓", sound: "sounds/z-zebra.mp3" }
   ];
 
   const KEY_COLORS = ["var(--key-1)", "var(--key-2)", "var(--key-3)", "var(--key-4)", "var(--key-5)", "var(--key-6)"];
@@ -62,6 +59,8 @@
   let muted = false;
   let audioCtx = null;
   let masterGain = null;
+  const soundBuffers = {};
+  let soundsReady = false;
 
   // ---- Build the on-screen keyboard (also serves touch/tablet users) ----
   ANIMALS.forEach((a, i) => {
@@ -110,7 +109,7 @@
 
     const unlock = () => {
       if (audioCtx.state === "suspended") audioCtx.resume();
-      chime(523.3, "sine");
+      preloadSounds().then(() => playAnimalSound("C"));
     };
     // resume() is a promise; some browsers need the gesture-triggered
     // call itself, others are fine a tick later — cover both.
@@ -145,7 +144,7 @@
     const animal = animalByLetter[letter];
     if (!animal) return;
 
-    chime(animal.freq, animal.wave);
+    playAnimalSound(letter);
     showAnimal(animal);
     dropLetter(letter);
 
@@ -157,30 +156,36 @@
     }
   }
 
-  // ---- Synth: a short cheerful "boop" with a tiny upward pitch bend,
-  //      so every animal shares one friendly voice instead of 26
-  //      inconsistent recordings. Stopping/replacing fast on key-mash
-  //      is handled by simply letting notes be short + gain-limited,
-  //      the audio equivalent of resetting currentTime on an <audio> tag. ----
-  function chime(freq, wave) {
+  // ---- Animal sounds: fetch MP3s once, replay from AudioBuffers ----
+  async function preloadSounds() {
+    if (soundsReady || !audioCtx) return;
+    await Promise.all(
+      ANIMALS.map(async (animal) => {
+        if (soundBuffers[animal.letter]) return;
+        const res = await fetch(animal.sound);
+        if (!res.ok) throw new Error("Could not load " + animal.sound);
+        const data = await res.arrayBuffer();
+        soundBuffers[animal.letter] = await audioCtx.decodeAudioData(data);
+      })
+    );
+    soundsReady = true;
+  }
+
+  function playAnimalSound(letter) {
     if (!audioCtx || muted) return;
-    if (audioCtx.state === "suspended") audioCtx.resume(); // defensive: some browsers re-suspend an idle context
-    const now = audioCtx.currentTime;
+    if (audioCtx.state === "suspended") audioCtx.resume();
 
-    const osc = audioCtx.createOscillator();
-    osc.type = wave;
-    osc.frequency.setValueAtTime(freq, now);
-    osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 0.12);
+    const buffer = soundBuffers[letter];
+    if (!buffer) {
+      preloadSounds().then(() => playAnimalSound(letter));
+      return;
+    }
 
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.9, now + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
-
-    osc.connect(gain);
-    gain.connect(masterGain);
-    osc.start(now);
-    osc.stop(now + 0.34);
+    const playSec = Math.min(MAX_SOUND_SEC, buffer.duration);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(masterGain);
+    src.start(0, 0, playSec);
   }
 
   // ---- Visuals: animal hops onto the grass stage + speech bubble ----
