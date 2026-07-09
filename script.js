@@ -83,11 +83,25 @@
   //      browser autoplay policies). Some browsers (notably Safari/iOS)
   //      create the AudioContext in a "suspended" state even inside a
   //      real user gesture, so we explicitly resume() it — that's the
-  //      #1 cause of "the page loads fine but I hear nothing." ----
+  //      #1 cause of "the page loads fine but I hear nothing."
+  //
+  //      Visibility uses an .is-active class (not the [hidden] attribute)
+  //      so layout CSS always matches JS state — attribute selectors can
+  //      lag or fail to match even after hidden=false. ----
   let started = false;
+
+  function showStage() {
+    stage.classList.add("is-active");
+    stage.removeAttribute("hidden");
+  }
+
   function startExperience() {
     if (started) return;
     started = true;
+
+    splash.remove();
+    showStage();
+    document.body.focus({ preventScroll: true });
 
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
@@ -101,10 +115,6 @@
     // resume() is a promise; some browsers need the gesture-triggered
     // call itself, others are fine a tick later — cover both.
     audioCtx.resume().then(unlock).catch(unlock);
-
-    splash.remove();
-    stage.hidden = false;
-    document.body.focus({ preventScroll: true });
   }
   startBtn.addEventListener("pointerdown", startExperience);
   startBtn.addEventListener("click", startExperience);
@@ -202,16 +212,22 @@
   const ratingInput = document.getElementById("ratingInput");
   const stars = document.querySelectorAll(".star");
 
-  feedbackBtn.addEventListener("click", () => {
-    feedbackModal.hidden = false;
-  });
+  function openFeedbackModal() {
+    feedbackModal.classList.add("is-open");
+    feedbackModal.removeAttribute("hidden");
+  }
 
-  feedbackClose.addEventListener("click", () => {
-    feedbackModal.hidden = true;
-  });
+  function closeFeedbackModal() {
+    feedbackModal.classList.remove("is-open");
+    feedbackModal.setAttribute("hidden", "");
+  }
+
+  feedbackBtn.addEventListener("click", openFeedbackModal);
+
+  feedbackClose.addEventListener("click", closeFeedbackModal);
 
   feedbackModal.addEventListener("click", (e) => {
-    if (e.target === feedbackModal) feedbackModal.hidden = true;
+    if (e.target === feedbackModal) closeFeedbackModal();
   });
 
   stars.forEach((star) => {
@@ -242,7 +258,7 @@
         feedbackForm.hidden = true;
         feedbackThanks.hidden = false;
         setTimeout(() => {
-          feedbackModal.hidden = true;
+          closeFeedbackModal();
           feedbackForm.hidden = false;
           feedbackThanks.hidden = true;
           feedbackForm.reset();

@@ -110,13 +110,13 @@ button { font-family: inherit; border: none; cursor: pointer; }
 }
 
 /* ---------------------------------------------------------
-   Main stage
+   Main stage — class toggles visibility; [hidden] is a11y/no-JS fallback
    --------------------------------------------------------- */
-.stage[hidden] {
+.stage:not(.is-active) {
   display: none !important;
 }
 
-.stage:not([hidden]) {
+.stage.is-active {
   position: fixed;
   inset: 0;
   display: flex;
@@ -365,11 +365,11 @@ button { font-family: inherit; border: none; cursor: pointer; }
 }
 .feedback-btn:active { transform: translateY(2px); box-shadow: none; }
 
-.feedback-overlay[hidden] {
+.feedback-overlay:not(.is-open) {
   display: none !important;
 }
 
-.feedback-overlay:not([hidden]) {
+.feedback-overlay.is-open {
   position: fixed;
   inset: 0;
   z-index: 20;
