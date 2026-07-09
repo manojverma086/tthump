@@ -343,6 +343,116 @@ button { font-family: inherit; border: none; cursor: pointer; }
 }
 .coffee-link:hover { opacity: 0.9; }
 
+/* ---------------------------------------------------------
+   Feedback button + modal
+   --------------------------------------------------------- */
+.feedback-btn {
+  position: fixed;
+  bottom: 8px;
+  left: 10px;
+  z-index: 5;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  background: rgba(255,255,255,0.75);
+  padding: 8px 14px;
+  border-radius: 16px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+}
+.feedback-btn:active { transform: translateY(2px); box-shadow: none; }
+
+.feedback-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(61,46,92,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.feedback-card {
+  position: relative;
+  width: min(92vw, 380px);
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 24px 20px 20px;
+  box-shadow: 0 10px 0 rgba(0,0,0,0.12);
+}
+
+.feedback-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  font-size: 18px;
+  color: var(--ink);
+  opacity: 0.6;
+}
+
+.feedback-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 14px;
+  text-align: center;
+}
+
+.feedback-stars {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.star {
+  background: transparent;
+  font-size: 30px;
+  color: #d8d2c4;
+  line-height: 1;
+  transition: transform 0.1s ease;
+}
+.star.filled { color: var(--sun-edge); }
+.star:active { transform: scale(0.9); }
+
+#feedbackForm { display: flex; flex-direction: column; gap: 10px; }
+
+#feedbackForm textarea,
+#feedbackForm input[type="email"] {
+  font-family: inherit;
+  font-size: 15px;
+  border: 2px solid #e6ddc8;
+  border-radius: 12px;
+  padding: 10px 12px;
+  resize: none;
+  color: var(--ink);
+  background: #fff;
+}
+#feedbackForm textarea:focus,
+#feedbackForm input[type="email"]:focus {
+  outline: none;
+  border-color: var(--tangerine);
+}
+
+.feedback-submit {
+  background: var(--berry);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 11px;
+  border-radius: 12px;
+  box-shadow: 0 4px 0 var(--berry-dark);
+}
+.feedback-submit:active { transform: translateY(3px); box-shadow: none; }
+
+.feedback-thanks {
+  text-align: center;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 17px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sun-button, .little-sun, .cloud-a, .cloud-b, .cloud-c { animation: none !important; }
 }

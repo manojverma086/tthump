@@ -79,19 +79,34 @@
   });
 
   // ---- Unlock audio + reveal the stage on the first tap (required by
-  //      browser autoplay policies — see fix in the dev plan) ----
-  startBtn.addEventListener("pointerdown", () => {
+  //      browser autoplay policies). Some browsers (notably Safari/iOS)
+  //      create the AudioContext in a "suspended" state even inside a
+  //      real user gesture, so we explicitly resume() it — that's the
+  //      #1 cause of "the page loads fine but I hear nothing." ----
+  let started = false;
+  function startExperience() {
+    if (started) return;
+    started = true;
+
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
     masterGain.gain.value = 0.35;
     masterGain.connect(audioCtx.destination);
 
+    const unlock = () => {
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      chime(523.3, "sine");
+    };
+    // resume() is a promise; some browsers need the gesture-triggered
+    // call itself, others are fine a tick later — cover both.
+    audioCtx.resume().then(unlock).catch(unlock);
+
     splash.remove();
     stage.hidden = false;
-
-    // A little welcome chime so it's obvious sound is on.
-    chime(523.3, "sine");
-  });
+    document.body.focus({ preventScroll: true });
+  }
+  startBtn.addEventListener("pointerdown", startExperience);
+  startBtn.addEventListener("click", startExperience);
 
   muteBtn.addEventListener("click", () => {
     muted = !muted;
@@ -100,15 +115,19 @@
     if (masterGain) masterGain.gain.value = muted ? 0 : 0.35;
   });
 
-  // ---- Physical keyboard support ----
-  window.addEventListener("keydown", (e) => {
+  // ---- Physical keyboard support. Attached to both window and document
+  //      as a redundancy — if focus ever lands somewhere unusual, one of
+  //      the two still catches the bubbled event. ----
+  function handleKeydown(e) {
     if (e.repeat) return; // a toddler holding a key shouldn't machine-gun the sound
     if (stage.hidden) return;
     const letter = e.key.toUpperCase();
     if (!animalByLetter[letter]) return;
     const btn = keyboard.querySelector('[data-letter="' + letter + '"]');
     playLetter(letter, btn);
-  });
+  }
+  window.addEventListener("keydown", handleKeydown);
+  document.addEventListener("keydown", handleKeydown);
 
   // ---- Core "press a letter" action ----
   function playLetter(letter, btnEl) {
@@ -134,6 +153,7 @@
   //      the audio equivalent of resetting currentTime on an <audio> tag. ----
   function chime(freq, wave) {
     if (!audioCtx || muted) return;
+    if (audioCtx.state === "suspended") audioCtx.resume(); // defensive: some browsers re-suspend an idle context
     const now = audioCtx.currentTime;
 
     const osc = audioCtx.createOscillator();
@@ -171,4 +191,71 @@
     void fallingLetter.offsetWidth;
     fallingLetter.classList.add("streak");
   }
+
+  // ---- Feedback modal ----
+  const feedbackBtn = document.getElementById("feedbackBtn");
+  const feedbackModal = document.getElementById("feedbackModal");
+  const feedbackClose = document.getElementById("feedbackClose");
+  const feedbackForm = document.getElementById("feedbackForm");
+  const feedbackThanks = document.getElementById("feedbackThanks");
+  const ratingInput = document.getElementById("ratingInput");
+  const stars = document.querySelectorAll(".star");
+
+  feedbackBtn.addEventListener("click", () => {
+    feedbackModal.hidden = false;
+  });
+
+  feedbackClose.addEventListener("click", () => {
+    feedbackModal.hidden = true;
+  });
+
+  feedbackModal.addEventListener("click", (e) => {
+    if (e.target === feedbackModal) feedbackModal.hidden = true;
+  });
+
+  stars.forEach((star) => {
+    star.addEventListener("click", () => {
+      const value = Number(star.dataset.value);
+      ratingInput.value = String(value);
+      stars.forEach((s) => {
+        const filled = Number(s.dataset.value) <= value;
+        s.classList.toggle("filled", filled);
+        s.setAttribute("aria-checked", String(filled && Number(s.dataset.value) === value));
+      });
+    });
+  });
+
+  feedbackForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const submitBtn = feedbackForm.querySelector(".feedback-submit");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
+
+    try {
+      const res = await fetch(feedbackForm.action, {
+        method: "POST",
+        body: new FormData(feedbackForm),
+        headers: { Accept: "application/json" }
+      });
+      if (res.ok) {
+        feedbackForm.hidden = true;
+        feedbackThanks.hidden = false;
+        setTimeout(() => {
+          feedbackModal.hidden = true;
+          feedbackForm.hidden = false;
+          feedbackThanks.hidden = true;
+          feedbackForm.reset();
+          stars.forEach((s) => s.classList.remove("filled"));
+        }, 1800);
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send feedback";
+        alert("Something went wrong sending that — mind trying again?");
+      }
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send feedback";
+      alert("Couldn't reach the server — check your connection and try again.");
+    }
+  });
 })();

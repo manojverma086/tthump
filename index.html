@@ -9,6 +9,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<!-- ===================== ANALYTICS (privacy-friendly, no cookies) =====================
+     Sign up free at https://www.cloudflare.com/web-analytics/ then paste your own
+     token below. If you'd rather use GoatCounter instead, swap this tag for:
+     <script data-goatcounter="https://YOURCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+-->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "YOUR_CLOUDFLARE_TOKEN_HERE"}'></script>
 </head>
 <body>
 
@@ -59,9 +66,41 @@
     <!-- Quiet, non-intrusive corner links -->
     <footer class="corner-links">
       <button id="muteBtn" class="icon-pill" aria-label="Mute sounds" aria-pressed="false">🔊</button>
-      <a class="coffee-link" href="https://buymeacoffee.com/" target="_blank" rel="noopener">☕ buy me a coffee</a>
+      <!-- Buy Me a Coffee link hidden for now — remove the comment markers below to bring it back
+      <a class="coffee-link" href="https://www.buymeacoffee.com/vermamanojg" target="_blank" rel="noopener">☕ buy me a coffee</a>
+      -->
     </footer>
+
+    <!-- Feedback entry point, tucked in the opposite corner from the coffee link -->
+    <button id="feedbackBtn" class="feedback-btn" aria-haspopup="dialog" aria-controls="feedbackModal">💬 feedback</button>
   </main>
+
+  <!-- ===================== FEEDBACK MODAL =====================
+       Submits to Formspree — sign up free at https://formspree.io,
+       create a form, and paste your own endpoint ID below in place
+       of YOUR_FORM_ID. Submissions land straight in your inbox. -->
+  <div id="feedbackModal" class="feedback-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+    <div class="feedback-card">
+      <button id="feedbackClose" class="feedback-close" aria-label="Close feedback form">✕</button>
+      <p id="feedbackTitle" class="feedback-title">How's Tap &amp; Roar going?</p>
+
+      <div id="feedbackStars" class="feedback-stars" role="radiogroup" aria-label="Rate your experience">
+        <button type="button" class="star" data-value="1" role="radio" aria-checked="false" aria-label="1 star">★</button>
+        <button type="button" class="star" data-value="2" role="radio" aria-checked="false" aria-label="2 stars">★</button>
+        <button type="button" class="star" data-value="3" role="radio" aria-checked="false" aria-label="3 stars">★</button>
+        <button type="button" class="star" data-value="4" role="radio" aria-checked="false" aria-label="4 stars">★</button>
+        <button type="button" class="star" data-value="5" role="radio" aria-checked="false" aria-label="5 stars">★</button>
+      </div>
+
+      <form id="feedbackForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="hidden" name="rating" id="ratingInput" value="">
+        <textarea name="message" id="feedbackMessage" placeholder="Tell us what your little one loved, or what to add..." rows="3" required></textarea>
+        <input type="email" name="email" placeholder="Your email (optional)">
+        <button type="submit" class="feedback-submit">Send feedback</button>
+      </form>
+      <p id="feedbackThanks" class="feedback-thanks" hidden>Thanks so much! 🌻</p>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
