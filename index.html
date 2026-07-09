@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tap &amp; Roar — Animal Meadow</title>
+<meta name="description" content="A tap-anywhere animal sound board for toddlers. Press a letter, meet an animal, hear a happy sound.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===================== SPLASH / START SCREEN ===================== -->
+  <!-- Browsers block audio until a real user gesture happens, so this   -->
+  <!-- big friendly sun button is both the "app icon" and the gesture    -->
+  <!-- that unlocks sound for the whole visit.                           -->
+  <div id="splash" class="splash">
+    <div class="splash-sky">
+      <div class="cloud cloud-a"></div>
+      <div class="cloud cloud-b"></div>
+      <div class="cloud cloud-c"></div>
+    </div>
+    <button id="startBtn" class="sun-button" aria-label="Tap the sun to start playing">
+      <span class="sun-face">☀</span>
+    </button>
+    <p class="splash-title">Tap &amp; Roar</p>
+    <p class="splash-sub">Tap the sun to begin</p>
+  </div>
+
+  <!-- ===================== MAIN MEADOW STAGE ===================== -->
+  <main id="stage" class="stage" hidden>
+
+    <h1 class="sr-only">Tap and Roar — an animal letter sound board for toddlers</h1>
+
+    <!-- Sky layer: sun, drifting clouds, and a shooting-star letter -->
+    <section class="sky" aria-hidden="true">
+      <div class="cloud cloud-a"></div>
+      <div class="cloud cloud-b"></div>
+      <div class="cloud cloud-c"></div>
+      <div class="little-sun"></div>
+      <div id="fallingLetter" class="falling-letter"></div>
+    </section>
+
+    <!-- Center performance area: the animal that just popped up -->
+    <section class="show" aria-live="polite">
+      <div id="speechBubble" class="speech-bubble"></div>
+      <div id="animalCard" class="animal-card">
+        <span id="animalEmoji" class="animal-emoji">🌻</span>
+      </div>
+    </section>
+
+    <!-- Grass + the big chunky on-screen keyboard (works for taps too) -->
+    <section class="grass">
+      <div id="keyboard" class="keyboard" role="group" aria-label="Letter buttons"></div>
+    </section>
+
+    <!-- Quiet, non-intrusive corner links -->
+    <footer class="corner-links">
+      <button id="muteBtn" class="icon-pill" aria-label="Mute sounds" aria-pressed="false">🔊</button>
+      <a class="coffee-link" href="https://buymeacoffee.com/" target="_blank" rel="noopener">☕ buy me a coffee</a>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
