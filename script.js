@@ -73,6 +73,7 @@
     btn.dataset.letter = a.letter;
     btn.addEventListener("pointerdown", (e) => {
       e.preventDefault();
+      if (!started) startExperience();
       playLetter(a.letter, btn);
     });
     keyboard.appendChild(btn);
@@ -120,9 +121,9 @@
   //      the two still catches the bubbled event. ----
   function handleKeydown(e) {
     if (e.repeat) return; // a toddler holding a key shouldn't machine-gun the sound
-    if (stage.hidden) return;
     const letter = e.key.toUpperCase();
     if (!animalByLetter[letter]) return;
+    if (!started) startExperience();
     const btn = keyboard.querySelector('[data-letter="' + letter + '"]');
     playLetter(letter, btn);
   }

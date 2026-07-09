@@ -112,7 +112,11 @@ button { font-family: inherit; border: none; cursor: pointer; }
 /* ---------------------------------------------------------
    Main stage
    --------------------------------------------------------- */
-.stage {
+.stage[hidden] {
+  display: none !important;
+}
+
+.stage:not([hidden]) {
   position: fixed;
   inset: 0;
   display: flex;
@@ -361,7 +365,11 @@ button { font-family: inherit; border: none; cursor: pointer; }
 }
 .feedback-btn:active { transform: translateY(2px); box-shadow: none; }
 
-.feedback-overlay {
+.feedback-overlay[hidden] {
+  display: none !important;
+}
+
+.feedback-overlay:not([hidden]) {
   position: fixed;
   inset: 0;
   z-index: 20;
