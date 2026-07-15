@@ -109,7 +109,7 @@
 
     const unlock = () => {
       if (audioCtx.state === "suspended") audioCtx.resume();
-      preloadSounds().then(() => playAnimalSound("C"));
+      preloadSounds();
     };
     // resume() is a promise; some browsers need the gesture-triggered
     // call itself, others are fine a tick later — cover both.
@@ -280,4 +280,242 @@
       alert("Couldn't reach the server — check your connection and try again.");
     }
   });
+
+  // ---- Stories: locale pack, family voices, name parade ----
+  const storiesBtn = document.getElementById("storiesBtn");
+  const storiesModal = document.getElementById("storiesModal");
+  const storiesClose = document.getElementById("storiesClose");
+  const storiesLocale = document.getElementById("storiesLocale");
+  const childNameInput = document.getElementById("childName");
+  const voiceList = document.getElementById("voiceList");
+  const addVoiceBtn = document.getElementById("addVoiceBtn");
+  const storyListEl = document.getElementById("storyList");
+  const storyCaption = document.getElementById("storyCaption");
+  const storyPlayBtn = document.getElementById("storyPlayBtn");
+  const storyStopBtn = document.getElementById("storyStopBtn");
+  const storyRecordBtn = document.getElementById("storyRecordBtn");
+
+  let selectedVoiceId = "default";
+  let selectedStoryId = null;
+  let recordingActive = false;
+  const CHILD_NAME_KEY = "tapRoarChildName";
+
+  function openStoriesModal() {
+    storiesModal.classList.add("is-open");
+    storiesModal.removeAttribute("hidden");
+    refreshStoriesUI();
+  }
+
+  function closeStoriesModal() {
+    TapRoarStories.stop();
+    storiesModal.classList.remove("is-open");
+    storiesModal.setAttribute("hidden", "");
+    storyStopBtn.hidden = true;
+    storyRecordBtn.hidden = false;
+    recordingActive = false;
+  }
+
+  function applyUiStrings() {
+    const t = TapRoarLocale.t;
+    document.getElementById("storiesTitle").textContent = t("storiesTitle");
+    document.getElementById("storiesLangLabel").textContent = t("languageLabel");
+    document.getElementById("storiesNameLabel").textContent = t("childName");
+    childNameInput.placeholder = t("childNamePlaceholder");
+    document.getElementById("storiesVoiceLabel").textContent = t("voiceLabel");
+    addVoiceBtn.textContent = t("voiceAdd");
+    document.getElementById("recordHint").textContent = t("voiceRecordHint");
+    storyPlayBtn.textContent = t("play");
+    storyStopBtn.textContent = t("stop");
+    storyRecordBtn.textContent = t("record");
+  }
+
+  function populateLocaleSelect() {
+    const current = TapRoarLocale.activeLocale;
+    storiesLocale.innerHTML = "";
+    TapRoarLocale.listLocales().forEach(({ code, label }) => {
+      const opt = document.createElement("option");
+      opt.value = code;
+      opt.textContent = label;
+      if (code === current) opt.selected = true;
+      storiesLocale.appendChild(opt);
+    });
+  }
+
+  async function renderVoiceList() {
+    voiceList.innerHTML = "";
+    const defaultChip = document.createElement("button");
+    defaultChip.type = "button";
+    defaultChip.className = "voice-chip" + (selectedVoiceId === "default" ? " selected" : "");
+    defaultChip.textContent = TapRoarLocale.t("voiceDefault");
+    defaultChip.addEventListener("click", () => {
+      selectedVoiceId = "default";
+      renderVoiceList();
+      updateRecordButton();
+    });
+    voiceList.appendChild(defaultChip);
+
+    const voices = await TapRoarVoices.listVoices();
+    voices.forEach((v) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "voice-chip" + (selectedVoiceId === v.id ? " selected" : "");
+      chip.textContent = v.label;
+      chip.addEventListener("click", () => {
+        selectedVoiceId = v.id;
+        renderVoiceList();
+        updateRecordButton();
+      });
+      voiceList.appendChild(chip);
+    });
+  }
+
+  function renderStoryList() {
+    storyListEl.innerHTML = "";
+    const pack = TapRoarLocale.pack;
+    if (!pack || !pack.stories) return;
+    pack.stories.forEach((story) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "story-item" + (selectedStoryId === story.id ? " selected" : "");
+      btn.innerHTML =
+        '<span class="story-item-title">' +
+        story.title +
+        '</span><span class="story-item-source">' +
+        (story.source || "") +
+        "</span>";
+      btn.addEventListener("click", () => {
+        selectedStoryId = story.id;
+        renderStoryList();
+        updateRecordButton();
+      });
+      storyListEl.appendChild(btn);
+    });
+    if (!selectedStoryId && pack.stories.length) {
+      selectedStoryId = pack.stories[0].id;
+      renderStoryList();
+    }
+  }
+
+  function updateRecordButton() {
+    storyRecordBtn.hidden = selectedVoiceId === "default";
+  }
+
+  async function refreshStoriesUI() {
+    applyUiStrings();
+    populateLocaleSelect();
+    await renderVoiceList();
+    renderStoryList();
+    updateRecordButton();
+  }
+
+  async function initStories() {
+    const savedName = localStorage.getItem(CHILD_NAME_KEY);
+    if (savedName) childNameInput.value = savedName;
+    try {
+      await TapRoarLocale.init();
+      await refreshStoriesUI();
+    } catch (err) {
+      storyCaption.textContent = "Could not load stories.";
+    }
+  }
+
+  storiesBtn.addEventListener("click", () => {
+    if (!started) startExperience();
+    openStoriesModal();
+  });
+  storiesClose.addEventListener("click", closeStoriesModal);
+  storiesModal.addEventListener("click", (e) => {
+    if (e.target === storiesModal) closeStoriesModal();
+  });
+
+  storiesLocale.addEventListener("change", async () => {
+    await TapRoarLocale.setLocale(storiesLocale.value);
+    selectedStoryId = null;
+    await refreshStoriesUI();
+  });
+
+  addVoiceBtn.addEventListener("click", async () => {
+    const label = prompt("Name this voice (e.g. Mum, Dad, Grandma):", "Family");
+    if (label === null) return;
+    const voice = await TapRoarVoices.createVoice(label);
+    selectedVoiceId = voice.id;
+    await renderVoiceList();
+    updateRecordButton();
+  });
+
+  childNameInput.addEventListener("change", () => {
+    localStorage.setItem(CHILD_NAME_KEY, childNameInput.value.trim());
+  });
+
+  storyPlayBtn.addEventListener("click", async () => {
+    const pack = TapRoarLocale.pack;
+    const story = pack.stories.find((s) => s.id === selectedStoryId);
+    if (!story) return;
+
+    localStorage.setItem(CHILD_NAME_KEY, childNameInput.value.trim());
+    storyStopBtn.hidden = false;
+    storyCaption.textContent = "";
+
+    await TapRoarStories.playStory(story, {
+      childName: childNameInput.value.trim(),
+      voiceId: selectedVoiceId,
+      speechLang: TapRoarLocale.getSpeechLang(),
+      animalByLetter,
+      onLetter: (letter) => {
+        const animal = animalByLetter[letter];
+        if (animal) {
+          showAnimal(animal);
+          dropLetter(letter);
+        }
+      },
+      onSegment: (seg) => {
+        storyCaption.textContent = seg.text;
+      },
+      onDone: () => {
+        storyStopBtn.hidden = true;
+      },
+      onError: (msg) => {
+        storyCaption.textContent = msg;
+      }
+    });
+  });
+
+  storyStopBtn.addEventListener("click", () => {
+    TapRoarStories.stop();
+    storyStopBtn.hidden = true;
+    storyCaption.textContent = "";
+  });
+
+  storyRecordBtn.addEventListener("click", async () => {
+    if (selectedVoiceId === "default") return;
+    const pack = TapRoarLocale.pack;
+    const story = pack.stories.find((s) => s.id === selectedStoryId);
+    if (!story || story.type === "name-parade") {
+      storyCaption.textContent = "Record a fixed story first (name parade uses live voice).";
+      return;
+    }
+
+    if (!recordingActive) {
+      try {
+        await TapRoarStories.startRecording();
+        recordingActive = true;
+        storyRecordBtn.textContent = TapRoarLocale.t("stopRecord");
+        storyCaption.textContent = "Read the story aloud now…";
+      } catch {
+        storyCaption.textContent = "Microphone access is needed to record.";
+      }
+      return;
+    }
+
+    recordingActive = false;
+    storyRecordBtn.textContent = TapRoarLocale.t("record");
+    try {
+      await TapRoarStories.stopRecordingAndSave(selectedVoiceId, story.id);
+      storyCaption.textContent = TapRoarLocale.t("recordSaved");
+    } catch {
+      storyCaption.textContent = "Could not save recording.";
+    }
+  });
+
+  initStories();
 })();
