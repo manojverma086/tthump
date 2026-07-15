@@ -1,0 +1,45 @@
+{
+  "ui": {
+    "storiesTitle": "Hora del cuento",
+    "childName": "Nombre del niño",
+    "childNamePlaceholder": "ej. Sofia, Leo",
+    "voiceLabel": "Narrador",
+    "voiceDefault": "Voz amable",
+    "voiceAdd": "+ Voz familiar",
+    "voiceRecordHint": "Graba tu voz leyendo este cuento — solo se guarda en este dispositivo.",
+    "record": "Grabar",
+    "stopRecord": "Parar",
+    "play": "Escuchar",
+    "stop": "Detener",
+    "nameParadeTitle": "Desfile de {{name}}",
+    "languageLabel": "Idioma de cuentos",
+    "noStories": "Cargando cuentos…",
+    "recordSaved": "Tu grabación está guardada.",
+    "lettersOnly": "Usa solo letras A–Z para el desfile."
+  },
+  "nameParade": {
+    "intro": "¡Conozcamos los animales en el nombre de {{name}}!",
+    "letterLine": "¡{{letter}} es de {{animal}}!",
+    "outro": "¡Hurra por {{name}}! ¡Qué nombre tan bonito!"
+  },
+  "stories": [
+    {
+      "id": "cat-and-owl",
+      "title": "El gato y el búho",
+      "source": "Original para Tap & Roar",
+      "segments": [
+        { "text": "En el prado, un Gato jugaba todo el día." },
+        { "text": "C es de Cat — nuestro gato.", "letter": "C", "pauseAfter": 900 },
+        { "text": "De noche, un Búho miraba las estrellas." },
+        { "text": "O es de Owl — el búho.", "letter": "O", "pauseAfter": 900 },
+        { "text": "El Gato y el Búho se hicieron amigos.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "name-parade",
+      "title": "Mi desfile de nombre",
+      "type": "name-parade",
+      "source": "Personalizado con el nombre de tu hijo"
+    }
+  ]
+}

@@ -33,7 +33,7 @@
       <span class="sun-face">☀</span>
     </button>
     <p class="splash-title">Tap &amp; Roar</p>
-    <p class="splash-sub">Tap the sun to begin</p>
+    <p class="splash-sub">Tap the sun to play · Stories anytime</p>
   </div>
 
   <!-- ===================== MAIN MEADOW STAGE ===================== -->
@@ -65,6 +65,7 @@
 
     <!-- Quiet, non-intrusive corner links -->
     <footer class="corner-links">
+      <button id="storiesBtn" class="icon-pill stories-pill" aria-haspopup="dialog" aria-controls="storiesModal" title="Stories">📖</button>
       <button id="muteBtn" class="icon-pill" aria-label="Mute sounds" aria-pressed="false">🔊</button>
       <!-- Buy Me a Coffee link hidden for now — remove the comment markers below to bring it back
       <a class="coffee-link" href="https://www.buymeacoffee.com/vermamanojg" target="_blank" rel="noopener">☕ buy me a coffee</a>
@@ -102,6 +103,47 @@
     </div>
   </div>
 
+  <!-- ===================== STORIES MODAL =====================
+       Locale-based JSON stories + family voice recordings (device-local).
+       Content: originals & public-domain adaptations only — add licensed
+       books via JSON when you provide rights-cleared text. -->
+  <div id="storiesModal" class="stories-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="storiesTitle">
+    <div class="stories-card">
+      <button id="storiesClose" class="feedback-close" aria-label="Close stories">✕</button>
+      <p id="storiesTitle" class="feedback-title">Story time</p>
+
+      <label class="stories-field">
+        <span id="storiesLangLabel" class="stories-label">Stories language</span>
+        <select id="storiesLocale" class="stories-select"></select>
+      </label>
+
+      <label class="stories-field">
+        <span id="storiesNameLabel" class="stories-label">Child's name</span>
+        <input type="text" id="childName" class="stories-input" maxlength="24" autocomplete="off" placeholder="e.g. Mia, Leo">
+      </label>
+
+      <div class="stories-field">
+        <span id="storiesVoiceLabel" class="stories-label">Narrator</span>
+        <div id="voiceList" class="voice-list" role="listbox"></div>
+        <button type="button" id="addVoiceBtn" class="stories-secondary">+ Family voice</button>
+        <p id="recordHint" class="stories-hint"></p>
+      </div>
+
+      <div id="storyList" class="story-list"></div>
+
+      <p id="storyCaption" class="story-caption" aria-live="polite"></p>
+
+      <div class="stories-actions">
+        <button type="button" id="storyPlayBtn" class="feedback-submit">Play story</button>
+        <button type="button" id="storyStopBtn" class="stories-secondary" hidden>Stop</button>
+        <button type="button" id="storyRecordBtn" class="stories-secondary" hidden>Record</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/locale.js"></script>
+  <script src="js/voices.js"></script>
+  <script src="js/stories.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

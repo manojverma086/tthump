@@ -1,0 +1,69 @@
+{
+  "ui": {
+    "storiesTitle": "Story time",
+    "childName": "Child's name",
+    "childNamePlaceholder": "e.g. Mia, Arjun, Leo",
+    "voiceLabel": "Narrator",
+    "voiceDefault": "Friendly voice",
+    "voiceAdd": "+ Family voice",
+    "voiceRecordHint": "Record yourself reading this story — it saves on this device only.",
+    "record": "Record",
+    "stopRecord": "Stop",
+    "play": "Play story",
+    "stop": "Stop",
+    "nameParadeTitle": "{{name}}'s animal parade",
+    "languageLabel": "Stories language",
+    "noStories": "Loading stories…",
+    "recordSaved": "Your recording is saved for this story.",
+    "lettersOnly": "Use letters A–Z only for the parade."
+  },
+  "nameParade": {
+    "intro": "Let's meet the animals in {{name}}'s name!",
+    "letterLine": "{{letter}} is for {{animal}}!",
+    "outro": "Hooray for {{name}}! What a wonderful name!"
+  },
+  "stories": [
+    {
+      "id": "cat-and-owl",
+      "title": "The Cat and the Owl",
+      "source": "Original story for Tap & Roar",
+      "segments": [
+        { "text": "In the meadow, a little Cat liked to play all day." },
+        { "text": "C is for Cat.", "letter": "C", "pauseAfter": 900 },
+        { "text": "At night, a gentle Owl watched the stars." },
+        { "text": "O is for Owl.", "letter": "O", "pauseAfter": 900 },
+        { "text": "The Cat and the Owl became friends.", "letter": null },
+        { "text": "They learned that day and night can both be beautiful.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "lion-and-mouse",
+      "title": "The Lion and the Mouse",
+      "source": "Adapted from Aesop (public domain)",
+      "segments": [
+        { "text": "A big Lion took a nap in the warm grass." },
+        { "text": "L is for Lion.", "letter": "L", "pauseAfter": 900 },
+        { "text": "A tiny friend ran by and woke him up." },
+        { "text": "The Lion laughed, but let the little one go." },
+        { "text": "Later, the Mouse helped the Lion. Small friends can do big things.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "elephant-splash",
+      "title": "The Elephant's Splash",
+      "source": "Original story for Tap & Roar",
+      "segments": [
+        { "text": "An Elephant walked slowly to the pond." },
+        { "text": "E is for Elephant.", "letter": "E", "pauseAfter": 900 },
+        { "text": "Fish jumped in the water.", "letter": "X", "pauseAfter": 900 },
+        { "text": "The Elephant sprayed water and everyone giggled.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "name-parade",
+      "title": "My name parade",
+      "type": "name-parade",
+      "source": "Personalized — uses your child's name"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "defaultLocale": "en",
+  "regionToLocale": {
+    "IN": "hi",
+    "US": "en",
+    "GB": "en",
+    "AU": "en",
+    "CA": "en",
+    "NZ": "en",
+    "IE": "en",
+    "ES": "es",
+    "MX": "es",
+    "AR": "es",
+    "CO": "es",
+    "FR": "fr",
+    "DE": "de",
+    "JP": "ja",
+    "BR": "pt"
+  },
+  "languageToLocale": {
+    "en": "en",
+    "hi": "hi",
+    "es": "es",
+    "fr": "fr",
+    "de": "de",
+    "ja": "ja",
+    "pt": "pt"
+  },
+  "locales": {
+    "en": { "file": "stories/en.json", "label": "English", "speechLang": "en-US" },
+    "hi": { "file": "stories/hi.json", "label": "हिन्दी", "speechLang": "hi-IN" },
+    "es": { "file": "stories/es.json", "label": "Español", "speechLang": "es-ES" },
+    "fr": { "file": "stories/fr.json", "label": "Français", "speechLang": "fr-FR" },
+    "de": { "file": "stories/de.json", "label": "Deutsch", "speechLang": "de-DE" },
+    "ja": { "file": "stories/ja.json", "label": "日本語", "speechLang": "ja-JP" },
+    "pt": { "file": "stories/pt.json", "label": "Português", "speechLang": "pt-BR" }
+  }
+}

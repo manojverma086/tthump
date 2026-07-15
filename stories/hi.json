@@ -1,0 +1,55 @@
+{
+  "ui": {
+    "storiesTitle": "Kahaniyan",
+    "childName": "Bachche ka naam",
+    "childNamePlaceholder": "jaise Aarav, Mia",
+    "voiceLabel": "Awaaz",
+    "voiceDefault": "Pyari awaaz",
+    "voiceAdd": "+ Parivaar ki awaaz",
+    "voiceRecordHint": "Is kahaniyan ko apni awaaz mein record karein — sirf is device par save hoga.",
+    "record": "Record",
+    "stopRecord": "Rokien",
+    "play": "Suniye",
+    "stop": "Band",
+    "nameParadeTitle": "{{name}} ka janwar parade",
+    "languageLabel": "Kahaniyan ki bhasha",
+    "noStories": "Kahaniyan load ho rahi hain…",
+    "recordSaved": "Aapki recording save ho gayi.",
+    "lettersOnly": "Parade ke liye sirf A–Z akshar."
+  },
+  "nameParade": {
+    "intro": "Chalo {{name}} ke naam ke janwar milte hain!",
+    "letterLine": "{{letter}} {{animal}} ke liye hai!",
+    "outro": "{{name}} ke liye jai ho! Kya pyara naam hai!"
+  },
+  "stories": [
+    {
+      "id": "cat-and-owl",
+      "title": "Billi aur Ullu",
+      "source": "Tap & Roar ke liye original",
+      "segments": [
+        { "text": "Meadow mein ek chhoti Billi din bhar khelti thi." },
+        { "text": "C matlab Cat — hamari Billi.", "letter": "C", "pauseAfter": 900 },
+        { "text": "Raat ko ek Ullu taare dekhta tha." },
+        { "text": "O matlab Owl — Ullu mama.", "letter": "O", "pauseAfter": 900 },
+        { "text": "Billi aur Ullu dost ban gaye.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "lion-and-mouse",
+      "title": "Sher aur Chuha",
+      "source": "Aesop se (public domain)",
+      "segments": [
+        { "text": "Ek bada Sher ghaas mein so raha tha." },
+        { "text": "L matlab Lion — Sher.", "letter": "L", "pauseAfter": 900 },
+        { "text": "Ek chhota Chuha daud kar guzra.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "name-parade",
+      "title": "Mera naam parade",
+      "type": "name-parade",
+      "source": "Aapke bachche ke naam par"
+    }
+  ]
+}
