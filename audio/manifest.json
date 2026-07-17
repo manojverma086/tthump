@@ -1,0 +1,68 @@
+{
+  "description": "Prerecorded story and rhyme audio. Run: node scripts/fetch-audio.mjs",
+  "files": [
+    {
+      "path": "audio/rhymes/en/twinkle-star.mp3",
+      "url": "https://archive.org/download/78_4-twinkle-twinkle-little-star_gbia0198136h/4.%20TWINKLE%2C%20TWINKLE%2C%20LITTLE%20STAR.mp3",
+      "storyId": "twinkle-star",
+      "source": "Internet Archive 78rpm (public domain)",
+      "archive": "https://archive.org/details/78_4-twinkle-twinkle-little-star_gbia0198136h"
+    },
+    {
+      "path": "audio/rhymes/en/baa-baa-black-sheep.mp3",
+      "url": "https://archive.org/download/78_2-jack-and-jill_gbia0210109/03%20-%203.%20BAA%20BAA%20BLACK%20SHEEP.mp3",
+      "storyId": "baa-baa-black-sheep",
+      "source": "Internet Archive 78rpm (public domain)",
+      "archive": "https://archive.org/details/78_2-jack-and-jill_gbia0210109"
+    },
+    {
+      "path": "audio/rhymes/en/humpty-dumpty.mp3",
+      "url": "https://archive.org/download/78_2-jack-and-jill_gbia0210109/04%20-%204.%20HUMPTY%20DUMPTY.mp3",
+      "storyId": "humpty-dumpty",
+      "source": "Internet Archive 78rpm (public domain)",
+      "archive": "https://archive.org/details/78_2-jack-and-jill_gbia0210109"
+    },
+    {
+      "path": "audio/rhymes/en/row-your-boat.mp3",
+      "url": "https://archive.org/download/78_row-row-row-your-boat-the-gingerbread-man_the-robin-hood-players_gbia0534688b/ROW%20ROW%20ROW%20YOUR%20BOAT%3B%20THE%20GINGER%20-%20The%20Robin%20Hood%20Players.mp3",
+      "storyId": "row-your-boat",
+      "source": "Internet Archive 78rpm (public domain)",
+      "archive": "https://archive.org/details/78_row-row-row-your-boat-the-gingerbread-man_the-robin-hood-players_gbia0534688b"
+    },
+    {
+      "path": "audio/rhymes/en/itsy-bitsy-spider.mp3",
+      "url": "https://archive.org/download/incy-wincy-spider/Incy_Wincy_Spider.mp3",
+      "storyId": "itsy-bitsy-spider",
+      "source": "Internet Archive community upload",
+      "archive": "https://archive.org/details/incy-wincy-spider"
+    },
+    {
+      "path": "audio/stories/en/lion-and-mouse.mp3",
+      "url": "https://archive.org/download/78_the-lion-and-the-mouse_aesop_gbia0533949b/The%20Lion%20And%20The%20Mouse%20-%20AESOP.mp3",
+      "storyId": "lion-and-mouse",
+      "source": "Internet Archive 78rpm Aesop (public domain)",
+      "archive": "https://archive.org/details/78_the-lion-and-the-mouse_aesop_gbia0533949b"
+    },
+    {
+      "path": "audio/stories/en/tortoise-race.mp3",
+      "url": "https://archive.org/download/78_the-tortoise-and-the-hare_sterling-holloway-aesop-idriss-tibbles-paul-fitzpatrick_gbia0459280b/THE%20TORTOISE%20AND%20THE%20HARE%20-%20STERLING%20HOLLOWAY.mp3",
+      "storyId": "tortoise-race",
+      "source": "Internet Archive 78rpm Aesop (public domain)",
+      "archive": "https://archive.org/details/78_the-tortoise-and-the-hare_sterling-holloway-aesop-idriss-tibbles-paul-fitzpatrick_gbia0459280b"
+    },
+    {
+      "path": "audio/rhymes/hi/nani-teri-morni.mp3",
+      "url": "https://archive.org/download/nani-teri-morni/nani%20teri%20morni.mp3",
+      "storyId": "nani-teri-morni",
+      "source": "Internet Archive community upload",
+      "archive": "https://archive.org/details/nani-teri-morni"
+    },
+    {
+      "path": "audio/rhymes/hi/chanda-mama.mp3",
+      "url": "https://archive.org/download/chanda-mama-dur-ke/Chanda_Mama_Dur_Ke.mp3",
+      "storyId": "chanda-mama",
+      "source": "Internet Archive community upload",
+      "archive": "https://archive.org/details/chanda-mama-dur-ke"
+    }
+  ]
+}

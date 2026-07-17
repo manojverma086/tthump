@@ -362,6 +362,7 @@
     storyPlayBtn.disabled = busy;
     storyPlayBtn.classList.toggle("is-busy", busy);
     storyPlayBtn.textContent = busy ? TapRoarLocale.t("voicePreparing") || "Preparing…" : playLabelDefault();
+    syncStoryMiniPlayer();
   }
 
   function hideVoiceCloneStatus() {
@@ -482,6 +483,21 @@
     storyMiniLabel.textContent = TapRoarLocale.t("storyMiniPlaying");
     storyMiniExpand.setAttribute("aria-label", TapRoarLocale.t("storyMiniExpand"));
     storyMiniStop.textContent = TapRoarLocale.t("storyMiniStop");
+    syncStoryMiniPlayer();
+  }
+
+  /** Mini bar only when modal is minimized AND audio is actually playing/preparing. */
+  function syncStoryMiniPlayer() {
+    const shouldShow = storiesModalMinimized && isStorySessionActive();
+    storyMiniPlayer.hidden = !shouldShow;
+    if (!shouldShow) {
+      storyMiniCaption.textContent = "";
+      if (!isStorySessionActive()) {
+        storiesModalMinimized = false;
+      }
+    } else {
+      storyMiniCaption.textContent = storyCaption.textContent || "";
+    }
   }
 
   function syncStoryCaption(text) {
@@ -492,17 +508,14 @@
   }
 
   function showStoryMiniPlayer() {
+    if (!isStorySessionActive()) return;
     storiesModalMinimized = true;
-    storyMiniPlayer.hidden = false;
-    storyMiniCaption.textContent = storyCaption.textContent || "";
-    updateStoryChrome();
+    syncStoryMiniPlayer();
   }
 
   function hideStoryMiniPlayer() {
     storiesModalMinimized = false;
-    storyMiniPlayer.hidden = true;
-    storyMiniCaption.textContent = "";
-    updateStoryChrome();
+    syncStoryMiniPlayer();
   }
 
   function hideStoriesModalShell() {
@@ -798,7 +811,11 @@
         (selectedStoryId === story.id ? " selected" : "") +
         (story.custom ? " story-item--custom" : "") +
         (story.type === "rhyme" ? " story-item--rhyme" : "");
-      const titlePrefix = story.type === "rhyme" ? "🎵 " : "";
+      const hasAudio =
+        story.audio &&
+        (typeof story.audio === "string" ||
+          Object.values(story.audio).some(Boolean));
+      const titlePrefix = story.type === "rhyme" ? "🎵 " : hasAudio ? "🔊 " : "";
       btn.innerHTML =
         '<span class="story-item-title">' +
         titlePrefix +
@@ -861,6 +878,7 @@
   async function initStories() {
     const savedName = localStorage.getItem(CHILD_NAME_KEY);
     if (savedName) childNameInput.value = savedName;
+    hideStoryMiniPlayer();
     try {
       if (window.TapRoarStories && TapRoarStories.preloadSpeechVoices) {
         TapRoarStories.preloadSpeechVoices();

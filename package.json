@@ -1,0 +1,12 @@
+{
+  "name": "tap-roar",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/**/*.test.mjs",
+    "fetch-audio": "node scripts/fetch-audio.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

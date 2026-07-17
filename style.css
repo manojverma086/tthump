@@ -1025,6 +1025,10 @@ button { font-family: inherit; border: none; cursor: pointer; }
   75% { transform: translateX(6px); }
 }
 
+.story-mini-player[hidden] {
+  display: none !important;
+}
+
 .story-mini-player {
   position: fixed;
   left: 50%;

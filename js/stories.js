@@ -185,6 +185,77 @@
     }
   }
 
+  function resolvePrerecordedSrc(story, opts) {
+    if (!global.TapRoarStoryAudio) return null;
+    const locale =
+      (global.TapRoarLocale && global.TapRoarLocale.activeLocale) || "en";
+    const src = global.TapRoarStoryAudio.resolveStoryAudio(story, locale);
+    if (!src || !global.TapRoarStoryAudio.isPrerecordedSrc(src)) return null;
+    return src;
+  }
+
+  async function playFileUrl(url, segments, opts) {
+    if (stopRequested) return;
+
+    return new Promise((resolve, reject) => {
+      releaseAudioUrl();
+      audioEl = new Audio(url);
+      audioEl.preservesPitch = true;
+      audioEl.volume = BEDTIME.volume;
+      audioEl.playbackRate = 1;
+
+      const startSync = () => {
+        if (stopRequested) return;
+        if (segments.length && audioEl.duration && isFinite(audioEl.duration)) {
+          scheduleSegmentSync(segments, audioEl.duration, opts);
+        }
+        if (opts.onPlaybackStart) opts.onPlaybackStart();
+      };
+
+      audioEl.onloadedmetadata = startSync;
+      if (audioEl.readyState >= 1) startSync();
+
+      audioEl.onended = () => {
+        audioEl = null;
+        clearSyncTimers();
+        resolve();
+      };
+      audioEl.onerror = () => {
+        audioEl = null;
+        clearSyncTimers();
+        reject(new Error("Could not play story audio."));
+      };
+      audioEl.play().catch((err) => {
+        audioEl = null;
+        clearSyncTimers();
+        reject(err);
+      });
+    });
+  }
+
+  async function playPrerecorded(story, segments, opts) {
+    const src = resolvePrerecordedSrc(story, opts);
+    if (!src) return false;
+
+    playing = true;
+    stopRequested = false;
+
+    try {
+      await wait(BEDTIME.introPauseMs);
+      await playFileUrl(src, segments, opts);
+    } catch (err) {
+      playing = false;
+      clearSyncTimers();
+      console.warn("Prerecorded audio failed, using TTS:", err.message || err);
+      return false;
+    }
+
+    playing = false;
+    clearSyncTimers();
+    if (opts.onDone) opts.onDone();
+    return true;
+  }
+
   async function playBlobAndWait(blob) {
     return new Promise((resolve, reject) => {
       if (stopRequested) {
@@ -432,6 +503,7 @@
     stopRequested = false;
 
     const storyOpts = { ...opts, contentType: story.type || "story" };
+    const useFamilyVoice = opts.voiceId && opts.voiceId !== "default";
 
     if (story.type === "name-parade") {
       const name = (opts.childName || "").trim();
@@ -441,15 +513,21 @@
       }
       const segments = buildNameParadeSegments(name, global.TapRoarLocale.pack, opts.animalByLetter);
 
-      if (opts.voiceId && opts.voiceId !== "default") {
+      if (useFamilyVoice) {
         const paradeId = "name-parade:" + name.toUpperCase();
         return playClonedSegments(opts.voiceId, paradeId, segments, storyOpts);
       }
       return playSegments(segments, storyOpts);
     }
 
-    if (opts.voiceId && opts.voiceId !== "default") {
-      const segments = story.segments || [];
+    const segments = story.segments || [];
+
+    if (!useFamilyVoice) {
+      const played = await playPrerecorded(story, segments, storyOpts);
+      if (played) return;
+    }
+
+    if (useFamilyVoice) {
       if (!segments.length) {
         if (opts.onError) opts.onError(global.TapRoarLocale.t("noStories"));
         return;
@@ -457,7 +535,7 @@
       return playClonedSegments(opts.voiceId, story.id, segments, storyOpts);
     }
 
-    return playSegments(story.segments || [], storyOpts);
+    return playSegments(segments, storyOpts);
   }
 
   function stopPlayback() {
