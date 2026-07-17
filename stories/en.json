@@ -1,0 +1,439 @@
+{
+  "ui": {
+    "storiesTitle": "Story time",
+    "childName": "Child's name",
+    "childNamePlaceholder": "e.g. Mia, Arjun, Leo",
+    "voiceLabel": "Narrator (Awaaz)",
+    "voiceDefault": "Gentle story voice",
+    "voiceAdd": "+ Add family voice",
+    "storiesLaunch": "Stories & voices",
+    "rhymesTitle": "Rhymes & songs",
+    "rhymesLaunch": "Rhymes & songs",
+    "playRhyme": "Play rhyme",
+    "rhymeMiniPlaying": "Rhyme playing…",
+    "stageProgress": "Rhyme progress",
+    "voiceRecordHint": "Record once in a soft, loving voice — like bedtime. Your computer reads every story; the sample stays on this device.",
+    "voiceSetupTitle": "Record a family voice",
+    "voiceSetupHint": "Speak softly and slowly — like snuggling up for bedtime. Smile and say: “Hello, my little one… once upon a time, I’ll tell you a lovely story.” Quiet room, 10–15 seconds.",
+    "voicePreviewExplain": "▶ Your recording = real you. ✨ Test = soft story voice for your little one.",
+    "voiceRecording": "Recording… speak for 8–12 seconds, then tap Stop.",
+    "voiceSetupName": "Voice name",
+    "voiceSampleUpload": "Upload voice sample",
+    "voiceUploadHint": "No mic? Record on your phone, AirDrop the file here, or plug in a USB headset.",
+    "voiceSampleStop": "Stop",
+    "voiceSamplePreview": "Your recording",
+    "voiceSampleClone": "Test AI voice",
+    "voiceCloneTesting": "Creating AI voice preview…",
+    "voiceSampleSave": "Save voice",
+    "voiceSampleCancel": "Cancel",
+    "voiceSampleSaved": "Voice saved! Find it under Awaaz.",
+    "voiceMicNeeded": "Please allow microphone access to record.",
+    "voiceRecordFirst": "Record a voice sample first.",
+    "recordStoryToHear": "Tap Play story — first time generates audio on your voice server.",
+    "voiceNeedsSetup": "Add a family voice sample first — tap + Add family voice.",
+    "voiceApiRequired": "Start the voice server (see docs/VOICE_API.md), then refresh.",
+    "voiceModelReady": "Ready to play!",
+    "voiceSynthTitle": "Creating your story",
+    "voiceSynthOnce": "One quick AI pass for the whole story — please wait…",
+    "voiceSynthPlay": "Playing your story…",
+    "voiceSynthLine": "Preparing line {{n}} of {{total}}",
+    "voiceSynthBuffer": "Buffering line {{n}} of {{total}}…",
+    "voiceSynthStart": "Starting your story…",
+    "voicePreparing": "Preparing…",
+    "voiceCloneReady": "Ready! Tap Play story anytime.",
+    "voiceClonePreparing": "Saving your voice sample…",
+    "voicePreviewPhrase": "Hello, my little one… once upon a time, there was a cosy story just for you.",
+    "storyRecorded": "Story saved in your voice! Tap Play story to listen.",
+    "recordStory": "Record this story",
+    "record": "Record",
+    "stopRecord": "Stop",
+    "play": "Play story",
+    "stop": "Stop",
+    "storyMinimizeHint": "Tap outside to hide — story keeps playing",
+    "storyMiniPlaying": "Story playing…",
+    "storyMiniExpand": "Show story controls",
+    "storyMiniStop": "Stop story",
+    "storiesCloseHide": "Hide story controls",
+    "storiesClose": "Close stories",
+    "nameParadeTitle": "{{name}}'s animal parade",
+    "languageLabel": "Stories language",
+    "noStories": "Loading stories…",
+    "recordSaved": "Your recording is saved for this story.",
+    "lettersOnly": "Use letters A–Z only for the parade.",
+    "writeStory": "+ Write your story",
+    "storyEditorTitle": "Write your story",
+    "storyEditorHint": "Tell it like bedtime — short lines, pauses between paragraphs, and speak to your little one (\"Look!\", \"Can you see?\"). Blank lines = pauses.",
+    "storyTitleLabel": "Story title",
+    "storyTitlePlaceholder": "e.g. The sleepy dragon",
+    "storyBodyLabel": "Story text",
+    "storyBodyPlaceholder": "Once upon a time…",
+    "storySave": "Save story",
+    "storyDelete": "Delete",
+    "storyCancel": "Cancel",
+    "storyEdit": "Edit story",
+    "storySaved": "Story saved! Tap Play story to hear it.",
+    "storyDeleted": "Story deleted.",
+    "storyTitleRequired": "Please enter a story title.",
+    "storyBodyRequired": "Please write at least one paragraph.",
+    "storyDeleteConfirm": "Delete this story? This cannot be undone.",
+    "yourStory": "Your story",
+    "rhymeSource": "Nursery rhyme"
+  },
+  "nameParade": {
+    "intro": "Come snuggle close, little one! Let's say your name and meet the animals hiding inside it!",
+    "letterLine": "{{letter}} — like {{animal}}! Can you see the {{animal}}?",
+    "outro": "Oh, {{name}} — what a beautiful name! I'm so proud of you. Hooray, hooray!"
+  },
+  "stories": [
+    {
+      "id": "cat-and-owl",
+      "title": "The Cat and the Owl",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Shhh… snuggle up close. I'm going to tell you a story about a little kitty and a gentle owl." },
+        { "text": "Look — in the soft green grass. Who do you see?" },
+        { "text": "A tiny Cat! So soft. So curious. Meow, meow." },
+        { "text": "C is for Cat — can you say hello to the kitty?", "letter": "C", "pauseAfter": 900 },
+        { "text": "All day long she chased butterflies. Flutter, flutter, flutter!" },
+        { "text": "Then the sun went to sleep… and the sky turned pink and purple." },
+        { "text": "Who wakes up then? Hoot, hoot! A gentle Owl in the tree." },
+        { "text": "O is for Owl — look at those big, kind eyes.", "letter": "O", "pauseAfter": 900 },
+        { "text": "The kitty felt a little scared of the dark. That's okay, little one." },
+        { "text": "The owl felt a little lonely when the sun was bright. That's okay too." },
+        { "text": "They sat on a low branch together. Purr, purr… hoot, hoot…" },
+        { "text": "You don't have to be afraid, said the owl. The night is cosy and quiet." },
+        { "text": "We can be friends, said the cat. I'll play with you when morning comes." },
+        { "text": "And they did! Best friends — day and night, side by side." },
+        { "text": "Just like you and me. Sleepy now? Sweet dreams, my little one.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "lion-and-mouse",
+      "title": "The Lion and the Mouse",
+      "source": "Grandma's telling — from Aesop",
+      "audio": "audio/stories/en/lion-and-mouse.mp3",
+      "segments": [
+        { "text": "Once upon a time — come closer — there was a big, big Lion." },
+        { "text": "He lay down in the warm grass. So sleepy. So still." },
+        { "text": "L is for Lion — hear that soft rumble? Rrrr.", "letter": "L", "pauseAfter": 900 },
+        { "text": "Along came a teeny-tiny Mouse. Pit-pat, pit-pat on his paw!" },
+        { "text": "M is for Mouse — so small you might miss her!", "letter": "M", "pauseAfter": 900 },
+        { "text": "The Lion opened one eye. Grrr? Who woke me up?" },
+        { "text": "The little Mouse trembled… but she didn't run away." },
+        { "text": "Please, please let me go, she squeaked. One day I might help you!" },
+        { "text": "The Lion laughed. Ho, ho! You? Help me?" },
+        { "text": "But he was kind. He lifted his big paw… and set her free." },
+        { "text": "Off she ran. Squeak, squeak, squeak!" },
+        { "text": "Weeks later — oh no! Hunters caught the Lion in a rope net." },
+        { "text": "Help! Help! he roared. Roar, roar!" },
+        { "text": "The little Mouse heard him. She came running as fast as she could." },
+        { "text": "Nibble, nibble, nibble — she chewed the ropes until they broke!" },
+        { "text": "The Lion was free! He smiled his biggest smile." },
+        { "text": "See, little one? Small friends can do very big things." },
+        { "text": "And you are loved — no matter how small you feel. Night-night.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "elephant-splash",
+      "title": "The Elephant's Splash",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "It was a hot, hot day. Can you feel the sunshine?" },
+        { "text": "Slowly, slowly… an Elephant walked to a cool blue pond." },
+        { "text": "E is for Elephant — big and gentle, trunk swinging side to side.", "letter": "E", "pauseAfter": 900 },
+        { "text": "Splash! Splash! Little fish jumped in the water." },
+        { "text": "Hello, fishies! said the Elephant, dipping her trunk in." },
+        { "text": "Whoosh! A rainbow of water drops flew up — can you see the colours?" },
+        { "text": "Birds in the trees giggled. Cheep, cheep!" },
+        { "text": "Frogs sang a happy song. Ribbit, ribbit!" },
+        { "text": "Everyone cooled off together. Splash, splash, splash!" },
+        { "text": "When you're hot and tired, a little splash can feel so nice." },
+        { "text": "Close your eyes now… imagine cool water on your toes. Ahh.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "dog-and-bunny",
+      "title": "The Dog and the Bunny",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Good morning, little one! Let's peek into a sunny garden." },
+        { "text": "There's a friendly Dog with a waggy, waggy tail." },
+        { "text": "D is for Dog — woof, woof! But listen… he's very gentle today.", "letter": "D", "pauseAfter": 900 },
+        { "text": "Hop, hop, hop! Who's that at the gate?" },
+        { "text": "A soft Bunny with a twitchy nose, nibbling clover." },
+        { "text": "R is for Rabbit — boink, boink! So quiet. So sweet.", "letter": "R", "pauseAfter": 900 },
+        { "text": "The Dog sat very still. He didn't chase. Good dog!" },
+        { "text": "The Bunny came closer… closer… and sat in the warm grass." },
+        { "text": "Two friends in the sunshine. No hurry. No fuss." },
+        { "text": "Every morning after that, they met and shared the quiet patch of grass." },
+        { "text": "Kindness is a warm, warm hug. Can you feel it? Mmm.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "bear-picnic",
+      "title": "The Bear's Picnic",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Are you hungry, little bear? Let's go on a picnic in our story." },
+        { "text": "Mama Bear packed a basket — yum, yum! Honey and berries." },
+        { "text": "B is for Bear — big and fuzzy, with a happy smile.", "letter": "B", "pauseAfter": 900 },
+        { "text": "She spread a blanket under a tall, tall pine tree." },
+        { "text": "Look — teeny ants marching in a line. March, march, march!" },
+        { "text": "Mama Bear shared a berry with each little ant. One for you… one for you…" },
+        { "text": "Everyone's tummy was full. So full. So happy." },
+        { "text": "Mama Bear yawned. A big, big yawn — can you yawn too?" },
+        { "text": "She curled up in the sunshine… and drifted off to sleep." },
+        { "text": "Full tummy, warm sun, soft blanket. That's the best picnic of all.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "penguin-slide",
+      "title": "Penguin's Ice Slide",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Brrr! Far away on the ice — but don't worry, we're cosy and warm here." },
+        { "text": "A little Penguin waddled up a snowy hill. Waddle, waddle, waddle." },
+        { "text": "P is for Penguin — flap, flap those little wings!", "letter": "P", "pauseAfter": 900 },
+        { "text": "She took a deep breath… one, two, three… and — wheee!" },
+        { "text": "Down she slid! Faster and faster! So much giggling!" },
+        { "text": "Her friends lined up. My turn! My turn!" },
+        { "text": "One by one they slid — bump, giggle, slide again!" },
+        { "text": "At the bottom they shook off the snow. Shake, shake, shake!" },
+        { "text": "Up the hill they went to do it all over again." },
+        { "text": "Playing with friends makes the coldest day feel warm inside.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "tiger-jungle",
+      "title": "Tiger in the Jungle",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Shhh… listen to the jungle. Can you hear the leaves rustling?" },
+        { "text": "Soft, soft steps… a Tiger with bright orange stripes." },
+        { "text": "T is for Tiger — strong and quiet. Not scary — just watchful.", "letter": "T", "pauseAfter": 900 },
+        { "text": "Up above, monkeys swung. Oo-oo-oo! Hello!" },
+        { "text": "Parrots called from the treetops. Squawk, squawk!" },
+        { "text": "The Tiger found a cool stream and took a long, long drink." },
+        { "text": "Slurp, slurp. Ahh — that's better." },
+        { "text": "When the Tiger was near, the little animals felt safe." },
+        { "text": "You are safe too, right here with me. I won't let go.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "whale-song",
+      "title": "The Whale's Song",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Deep, deep under the blue, blue ocean… close your eyes and float." },
+        { "text": "A great big Whale swam slowly, slowly through the waves." },
+        { "text": "W is for Whale — so big, so gentle, singing as she goes.", "letter": "W", "pauseAfter": 900 },
+        { "text": "She opened her mouth and sang — ooooh, ooooh — a low, soft song." },
+        { "text": "The song travelled far, far away under the water." },
+        { "text": "Dolphins danced in circles. Flip, flip, splash!" },
+        { "text": "Tiny fish shimmered like silver stars. Blink, blink." },
+        { "text": "The whole sea listened… until the last note faded away." },
+        { "text": "Sing your own soft song now… hum with me… mmmm.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "zebra-stripes",
+      "title": "Zebra's Stripes",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Look up — the sun is shining on the open plain." },
+        { "text": "Who's that? Black stripes, white stripes, shining bright!" },
+        { "text": "Z is for Zebra — every stripe is special, just like you.", "letter": "Z", "pauseAfter": 900 },
+        { "text": "A Giraffe bent down. Why do you look like that? she asked." },
+        { "text": "The Zebra smiled. Every stripe is different — like every friend." },
+        { "text": "No two zebras are the same. No two children are the same either!" },
+        { "text": "The Giraffe nodded. You are perfect just as you are." },
+        { "text": "They grazed together until the sky turned pink." },
+        { "text": "I love you just the way you are. Always and always.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "tortoise-race",
+      "title": "The Tortoise and the Hare",
+      "source": "Grandma's telling — from Aesop",
+      "audio": "audio/stories/en/tortoise-race.mp3",
+      "segments": [
+        { "text": "Ready for a race? Not a fast race — a story race!" },
+        { "text": "A quick Hare laughed at slow Tortoise. Ha, ha! I'll beat you easy!" },
+        { "text": "H is for Hare — zoom, zoom, so fast his ears fly back!", "letter": "H", "pauseAfter": 900 },
+        { "text": "On your marks… get set… GO!" },
+        { "text": "The Hare ran and ran — zoom! — then lay down for a nap. Zzz…" },
+        { "text": "T is for Tortoise — step, step, step. Slow and steady.", "letter": "T", "pauseAfter": 900 },
+        { "text": "She didn't stop. She didn't hurry. Step… step… step…" },
+        { "text": "Past the sleeping Hare she went. Shhh — don't wake him!" },
+        { "text": "When the Hare woke up — oh my! Tortoise was at the finish line!" },
+        { "text": "Slow and steady wins the race, little one." },
+        { "text": "You don't have to rush. Take your time. I'll wait for you.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "sleepy-moon",
+      "title": "The Sleepy Moon",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Night-night time. The sky is dark and soft, like a blanket." },
+        { "text": "Look out the window — can you see the Moon?" },
+        { "text": "Round and gentle, smiling down. Hello, Moon!" },
+        { "text": "The Moon yawned. It's time for little stars to twinkle on." },
+        { "text": "Twinkle, twinkle… one little star… then two… then more!" },
+        { "text": "The owls said goodnight. Hoot, hoot. Sleep well." },
+        { "text": "The crickets sang a lullaby. Chirp, chirp, chirp." },
+        { "text": "Your eyelids feel heavy… so heavy… like soft little curtains." },
+        { "text": "The Moon whispered: I will watch over you all night long." },
+        { "text": "Close your eyes, my darling. I'll be right here when you wake.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "ducklings-pond",
+      "title": "Five Little Ducklings",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Let's count some ducklings! Hold up your fingers — ready?" },
+        { "text": "One little duckling went out to play, splash in the pond — quack, quack!" },
+        { "text": "Two little ducklings, side by side, paddling softly — quack, quack!" },
+        { "text": "Three little ducklings dipped their bills, looking for yummy bugs — quack!" },
+        { "text": "Four little ducklings chased a ripple, round and round — splash, splash!" },
+        { "text": "Five little ducklings! Mama Duck called — come home now!" },
+        { "text": "Quack, quack, quack! They waddled back in a wiggly line." },
+        { "text": "Mama Duck counted — one, two, three, four, five — all safe!" },
+        { "text": "She tucked them under her wing. Warm, warm, warm." },
+        { "text": "Five little ducklings, fast asleep. And one little you — sleepy too?", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "choo-choo-train",
+      "title": "The Sleepy Train",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Chug, chug, chug… hear the train? It's coming down the track." },
+        { "text": "This train is going to Sleepy Town — want to ride along?" },
+        { "text": "Clickety-clack, clickety-clack… the wheels go round and round." },
+        { "text": "The train passed the meadow. Goodnight, cows. Moo, moo." },
+        { "text": "It passed the river. Goodnight, fish. Blub, blub." },
+        { "text": "It passed the forest. Goodnight, trees. Shhh, shhh." },
+        { "text": "The train slowed down… slower… and slower…" },
+        { "text": "At Sleepy Town station, every carriage went quiet." },
+        { "text": "Chug… chug… stop. We made it, little traveller." },
+        { "text": "Off you hop into dreamland. Choo-choo… goodnight.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "grandma-garden",
+      "title": "Grandma's Garden",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Let me tell you about Grandma's garden — come hold my hand." },
+        { "text": "Push the gate — creak! — and smell the flowers. Mmm, so sweet!" },
+        { "text": "Red roses, yellow daisies, purple lavender — which is your favourite?" },
+        { "text": "Grandma kneels down and whispers to the bees. Buzz, buzz — go gently." },
+        { "text": "A ladybird lands on your finger. Dot, dot, dot — red and black!" },
+        { "text": "We pick a ripe strawberry. Yum! Juice on your chin — that's okay!" },
+        { "text": "Grandma wipes your face and gives you the biggest hug." },
+        { "text": "In this garden, she says, every little thing is loved and cared for." },
+        { "text": "And so are you, my treasure. Every single day." },
+        { "text": "Let's go inside now… cosy pyjamas… and a story before bed.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "brave-little-seed",
+      "title": "The Brave Little Seed",
+      "source": "Bedtime story for Tap & Roar",
+      "segments": [
+        { "text": "Under the dark, dark soil — shhh — a tiny seed was sleeping." },
+        { "text": "Rain tapped on the ground. Tap, tap, tap. Wake up, little one!" },
+        { "text": "The seed was scared. It's dark down here! I can't see!" },
+        { "text": "But the rain was kind. I'll help you grow, it said softly." },
+        { "text": "The seed pushed… and pushed… a little root went down." },
+        { "text": "Then — pop! — a green shoot came up into the sunshine!" },
+        { "text": "Hello, world! said the little plant. Hello, sun! Hello, sky!" },
+        { "text": "Day by day it grew taller — leaves, then a flower — so bright!" },
+        { "text": "You are growing too, little one. Every day, a little more brave." },
+        { "text": "I'm so proud of you. Rest now — tomorrow we grow again.", "pauseAfter": 600 }
+      ]
+    },
+    {
+      "id": "name-parade",
+      "title": "My name parade",
+      "type": "name-parade",
+      "source": "Personalized — uses your child's name"
+    }
+  ],
+  "rhymes": [
+    {
+      "id": "twinkle-star",
+      "title": "Twinkle, Twinkle, Little Star",
+      "type": "rhyme",
+      "source": "Traditional nursery rhyme",
+      "audio": "audio/rhymes/en/twinkle-star.mp3",
+      "segments": [
+        { "text": "Let's sing together, little one! Listen…", "pauseAfter": 600 },
+        { "text": "Twinkle, twinkle, little star,", "pauseAfter": 700 },
+        { "text": "How I wonder what you are.", "pauseAfter": 700 },
+        { "text": "Up above the world so high,", "pauseAfter": 700 },
+        { "text": "Like a diamond in the sky.", "pauseAfter": 700 },
+        { "text": "Twinkle, twinkle, little star,", "pauseAfter": 700 },
+        { "text": "How I wonder what you are.", "pauseAfter": 500 }
+      ]
+    },
+    {
+      "id": "humpty-dumpty",
+      "title": "Humpty Dumpty",
+      "type": "rhyme",
+      "source": "Traditional nursery rhyme",
+      "audio": "audio/rhymes/en/humpty-dumpty.mp3",
+      "segments": [
+        { "text": "Here's a silly one — listen close!", "pauseAfter": 600 },
+        { "text": "Humpty Dumpty sat on a wall,", "pauseAfter": 700 },
+        { "text": "Humpty Dumpty had a great fall.", "pauseAfter": 700 },
+        { "text": "All the king's horses and all the king's men,", "pauseAfter": 700 },
+        { "text": "Couldn't put Humpty together again.", "pauseAfter": 500 }
+      ]
+    },
+    {
+      "id": "baa-baa-black-sheep",
+      "title": "Baa, Baa, Black Sheep",
+      "type": "rhyme",
+      "source": "Traditional nursery rhyme",
+      "audio": "audio/rhymes/en/baa-baa-black-sheep.mp3",
+      "segments": [
+        { "text": "Can you baa like a sheep? Let's try!", "pauseAfter": 600 },
+        { "text": "Baa, baa, black sheep, have you any wool?", "pauseAfter": 700 },
+        { "text": "Yes sir, yes sir, three bags full.", "pauseAfter": 700 },
+        { "text": "One for the master, one for the dame,", "pauseAfter": 700 },
+        { "text": "And one for the little boy who lives down the lane.", "pauseAfter": 500 }
+      ]
+    },
+    {
+      "id": "row-your-boat",
+      "title": "Row, Row, Row Your Boat",
+      "type": "rhyme",
+      "source": "Traditional nursery rhyme",
+      "audio": "audio/rhymes/en/row-your-boat.mp3",
+      "segments": [
+        { "text": "Rock with me — row, row, row!", "pauseAfter": 600 },
+        { "text": "Row, row, row your boat,", "pauseAfter": 650 },
+        { "text": "Gently down the stream.", "pauseAfter": 650 },
+        { "text": "Merrily, merrily, merrily, merrily,", "pauseAfter": 650 },
+        { "text": "Life is but a dream.", "pauseAfter": 500 }
+      ]
+    },
+    {
+      "id": "itsy-bitsy-spider",
+      "title": "The Itsy Bitsy Spider",
+      "type": "rhyme",
+      "source": "Traditional nursery rhyme",
+      "audio": "audio/rhymes/en/itsy-bitsy-spider.mp3",
+      "segments": [
+        { "text": "Up comes a tiny spider — don't worry, he's friendly!", "pauseAfter": 600 },
+        { "text": "The itsy bitsy spider climbed up the water spout.", "pauseAfter": 700 },
+        { "text": "Down came the rain and washed the spider out.", "pauseAfter": 700 },
+        { "text": "Out came the sun and dried up all the rain,", "pauseAfter": 700 },
+        { "text": "And the itsy bitsy spider climbed up the spout again.", "pauseAfter": 500 }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Tap &amp; Roar — Animal Meadow</title>
 <meta name="description" content="A tap-anywhere animal sound board for toddlers. Press a letter, meet an animal, hear a happy sound.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,17 +29,31 @@
       <div class="cloud cloud-b"></div>
       <div class="cloud cloud-c"></div>
     </div>
-    <button id="startBtn" class="sun-button" aria-label="Tap the sun to start playing">
-      <span class="sun-face">☀</span>
+    <div class="splash-hero">
+      <button id="startBtn" class="sun-button" aria-label="Tap the sun to start playing">
+        <span class="sun-rays" aria-hidden="true"></span>
+        <span class="sun-face">☀</span>
+        <span class="tap-ring" aria-hidden="true"></span>
+      </button>
+      <p class="splash-title">Tap &amp; Roar</p>
+      <p class="splash-sub">Tap the sun to play!</p>
+    </div>
+    <button id="storiesSplashBtn" class="stories-launch stories-launch--splash" type="button">
+      <span class="stories-launch-icon" aria-hidden="true">📖</span>
+      <span class="stories-launch-text">Stories &amp; voices</span>
     </button>
-    <p class="splash-title">Tap &amp; Roar</p>
-    <p class="splash-sub">Tap the sun to begin</p>
   </div>
 
   <!-- ===================== MAIN MEADOW STAGE ===================== -->
   <main id="stage" class="stage" hidden>
 
     <h1 class="sr-only">Tap and Roar — an animal letter sound board for toddlers</h1>
+
+    <!-- Parent controls — top edge, away from toddler tap zone -->
+    <nav class="parent-bar" aria-label="Parent controls">
+      <button id="feedbackBtn" class="parent-pill" aria-label="Send feedback" aria-haspopup="dialog" aria-controls="feedbackModal">💬</button>
+      <button id="muteBtn" class="parent-pill" aria-label="Mute sounds" aria-pressed="false">🔊</button>
+    </nav>
 
     <!-- Sky layer: sun, drifting clouds, and a shooting-star letter -->
     <section class="sky" aria-hidden="true">
@@ -48,31 +62,41 @@
       <div class="cloud cloud-c"></div>
       <div class="little-sun"></div>
       <div id="fallingLetter" class="falling-letter"></div>
+      <div class="horizon"></div>
     </section>
 
     <!-- Center performance area: the animal that just popped up -->
     <section class="show" aria-live="polite">
       <div id="speechBubble" class="speech-bubble"></div>
+      <p id="idlePrompt" class="idle-prompt">Tap a letter!</p>
       <div id="animalCard" class="animal-card">
+        <div class="stage-platform" aria-hidden="true"></div>
         <span id="animalEmoji" class="animal-emoji">🌻</span>
+        <span id="animalName" class="animal-name"></span>
+      </div>
+
+      <!-- Stage Mode — rhyme karaoke overlay on the meadow (not in modal) -->
+      <div id="rhymeStage" class="rhyme-stage" hidden>
+        <span id="stageCharacter" class="stage-character" aria-hidden="true">🎵</span>
+        <p id="stageLyric" class="stage-lyric" aria-live="polite"></p>
+        <div class="stage-progress-wrap">
+          <div id="stageProgress" class="stage-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="">
+            <div id="stageProgressFill" class="stage-progress-fill"></div>
+          </div>
+          <span id="stageTime" class="stage-time" aria-hidden="true"></span>
+        </div>
       </div>
     </section>
 
     <!-- Grass + the big chunky on-screen keyboard (works for taps too) -->
     <section class="grass">
+      <div class="meadow-flowers" aria-hidden="true"></div>
+      <button id="storiesBtn" class="stories-launch stories-launch--meadow" type="button" aria-haspopup="dialog" aria-controls="storiesModal">
+        <span class="stories-launch-icon" aria-hidden="true">📖</span>
+        <span class="stories-launch-text">Stories &amp; voices</span>
+      </button>
       <div id="keyboard" class="keyboard" role="group" aria-label="Letter buttons"></div>
     </section>
-
-    <!-- Quiet, non-intrusive corner links -->
-    <footer class="corner-links">
-      <button id="muteBtn" class="icon-pill" aria-label="Mute sounds" aria-pressed="false">🔊</button>
-      <!-- Buy Me a Coffee link hidden for now — remove the comment markers below to bring it back
-      <a class="coffee-link" href="https://www.buymeacoffee.com/vermamanojg" target="_blank" rel="noopener">☕ buy me a coffee</a>
-      -->
-    </footer>
-
-    <!-- Feedback entry point, tucked in the opposite corner from the coffee link -->
-    <button id="feedbackBtn" class="feedback-btn" aria-haspopup="dialog" aria-controls="feedbackModal">💬 feedback</button>
   </main>
 
   <!-- ===================== FEEDBACK MODAL =====================
@@ -102,6 +126,130 @@
     </div>
   </div>
 
+  <!-- ===================== STORIES MODAL =====================
+       Locale-based JSON stories + family voice recordings (device-local).
+       Content: originals & public-domain adaptations only — add licensed
+       books via JSON when you provide rights-cleared text. -->
+  <div id="storiesModal" class="stories-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="storiesTitle">
+    <div class="stories-card">
+      <button id="storiesClose" class="feedback-close" aria-label="Close stories">✕</button>
+      <p id="storiesTitle" class="feedback-title">Story time</p>
+
+      <div id="voiceSetup" class="voice-setup" hidden>
+        <p id="voiceSetupTitle" class="voice-setup-title">Record a family voice</p>
+        <p id="voiceSetupHint" class="stories-hint">Say: “Hello! I’ll read stories for you.” — saved only on this device.</p>
+        <label class="stories-field">
+          <span id="voiceSetupNameLabel" class="stories-label">Voice name</span>
+          <input type="text" id="newVoiceName" class="stories-input" maxlength="20" placeholder="e.g. Mum, Dad, Nani" autocomplete="off">
+        </label>
+        <p id="voicePreviewExplain" class="stories-hint voice-preview-explain"></p>
+        <div class="voice-setup-actions">
+          <button type="button" id="voiceSampleRecordBtn" class="feedback-submit">🎙 Start recording</button>
+          <button type="button" id="voiceSampleStopBtn" class="stories-secondary" hidden>Stop</button>
+          <button type="button" id="voiceSamplePlayBtn" class="stories-secondary" hidden>▶ Your recording</button>
+          <button type="button" id="voiceSampleCloneBtn" class="stories-secondary" hidden>✨ Test AI voice</button>
+        </div>
+        <div class="voice-setup-upload">
+          <label id="voiceSampleUploadLabel" class="voice-upload-label">
+            <span id="voiceSampleUploadText">📁 Upload voice sample</span>
+            <input type="file" id="voiceSampleFile" accept="audio/*,.m4a,.mp3,.wav,.webm,.aac" hidden>
+          </label>
+          <p id="voiceUploadHint" class="stories-hint">No mic? Record on your phone, AirDrop the file here, or plug in a USB headset.</p>
+        </div>
+        <div class="voice-setup-actions">
+          <button type="button" id="voiceSampleSaveBtn" class="feedback-submit" disabled>Save voice</button>
+          <button type="button" id="voiceSampleCancelBtn" class="stories-secondary">Cancel</button>
+        </div>
+      </div>
+
+      <div id="storyEditor" class="story-editor" hidden>
+        <p id="storyEditorTitle" class="voice-setup-title">Write your story</p>
+        <p id="storyEditorHint" class="stories-hint">Write a short story for your child. Blank lines between paragraphs add natural pauses when it is read aloud.</p>
+        <label class="stories-field">
+          <span id="storyEditorNameLabel" class="stories-label">Story title</span>
+          <input type="text" id="customStoryTitle" class="stories-input" maxlength="60" placeholder="e.g. The sleepy dragon" autocomplete="off">
+        </label>
+        <label class="stories-field">
+          <span id="storyEditorBodyLabel" class="stories-label">Story text</span>
+          <textarea id="customStoryBody" class="stories-textarea" rows="8" maxlength="4000" placeholder="Once upon a time…"></textarea>
+        </label>
+        <div class="voice-setup-actions">
+          <button type="button" id="customStorySaveBtn" class="feedback-submit">Save story</button>
+          <button type="button" id="customStoryDeleteBtn" class="stories-secondary story-delete-btn" hidden>Delete</button>
+          <button type="button" id="customStoryCancelBtn" class="stories-secondary">Cancel</button>
+        </div>
+      </div>
+
+      <div id="storiesMain">
+      <label class="stories-field">
+        <span id="storiesLangLabel" class="stories-label">Stories language</span>
+        <select id="storiesLocale" class="stories-select"></select>
+      </label>
+
+      <label class="stories-field">
+        <span id="storiesNameLabel" class="stories-label">Child's name</span>
+        <input type="text" id="childName" class="stories-input" maxlength="24" autocomplete="off" placeholder="e.g. Mia, Leo">
+      </label>
+
+      <div id="voiceSection" class="stories-field">
+        <span id="storiesVoiceLabel" class="stories-label">Narrator (Awaaz)</span>
+        <div id="voiceList" class="voice-list" role="listbox"></div>
+        <button type="button" id="addVoiceBtn" class="stories-secondary">+ Add family voice</button>
+        <p id="recordHint" class="stories-hint"></p>
+      </div>
+
+      <div id="storyList" class="story-list"></div>
+      <button type="button" id="writeStoryBtn" class="stories-secondary story-write-btn">+ Write your story</button>
+
+      <div id="voiceCloneStatus" class="voice-clone-status" hidden>
+        <div class="voice-clone-status-head">
+          <span class="voice-clone-icon" aria-hidden="true">✨</span>
+          <div>
+            <p id="voiceCloneTitle" class="voice-clone-title">Setting up your voice</p>
+            <p id="voiceCloneDetail" class="voice-clone-detail"></p>
+          </div>
+        </div>
+        <div id="voiceCloneBar" class="voice-clone-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div id="voiceCloneBarFill" class="voice-clone-bar-fill"></div>
+        </div>
+      </div>
+
+      <p id="storyCaption" class="story-caption" aria-live="polite"></p>
+
+      <div class="stories-actions">
+        <button type="button" id="storyPlayBtn" class="feedback-submit">Play story</button>
+        <button type="button" id="storyEditBtn" class="stories-secondary" hidden>Edit story</button>
+        <button type="button" id="storyStopBtn" class="stories-secondary" hidden>Stop</button>
+      </div>
+      <p id="storyMinimizeHint" class="stories-minimize-hint" hidden></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating bar when modal is hidden but story still plays -->
+  <div id="storyMiniPlayer" class="story-mini-player" hidden role="region" aria-labelledby="storyMiniLabel">
+    <button type="button" id="storyMiniExpand" class="story-mini-main">
+      <span class="story-mini-icon" aria-hidden="true">📖</span>
+      <span class="story-mini-text">
+        <span id="storyMiniLabel" class="story-mini-label">Story playing…</span>
+        <span id="storyMiniCaption" class="story-mini-caption"></span>
+        <span class="story-mini-progress" aria-hidden="true">
+          <span id="storyMiniProgressFill" class="story-mini-progress-fill"></span>
+        </span>
+      </span>
+    </button>
+    <button type="button" id="storyMiniStop" class="story-mini-stop">Stop</button>
+  </div>
+
+  <script src="js/legacy-cache-cleanup.js"></script>
+  <script src="js/voice-api-client.js"></script>
+  <script src="js/voice-clone-audio.js"></script>
+  <script src="js/mic.js"></script>
+  <script src="js/locale.js"></script>
+  <script src="js/voices.js"></script>
+  <script src="js/custom-stories.js"></script>
+  <script src="js/story-audio.js"></script>
+  <script src="js/stories.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
