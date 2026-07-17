@@ -74,6 +74,18 @@
         <span id="animalEmoji" class="animal-emoji">🌻</span>
         <span id="animalName" class="animal-name"></span>
       </div>
+
+      <!-- Stage Mode — rhyme karaoke overlay on the meadow (not in modal) -->
+      <div id="rhymeStage" class="rhyme-stage" hidden>
+        <span id="stageCharacter" class="stage-character" aria-hidden="true">🎵</span>
+        <p id="stageLyric" class="stage-lyric" aria-live="polite"></p>
+        <div class="stage-progress-wrap">
+          <div id="stageProgress" class="stage-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="">
+            <div id="stageProgressFill" class="stage-progress-fill"></div>
+          </div>
+          <span id="stageTime" class="stage-time" aria-hidden="true"></span>
+        </div>
+      </div>
     </section>
 
     <!-- Grass + the big chunky on-screen keyboard (works for taps too) -->
@@ -221,6 +233,9 @@
       <span class="story-mini-text">
         <span id="storyMiniLabel" class="story-mini-label">Story playing…</span>
         <span id="storyMiniCaption" class="story-mini-caption"></span>
+        <span class="story-mini-progress" aria-hidden="true">
+          <span id="storyMiniProgressFill" class="story-mini-progress-fill"></span>
+        </span>
       </span>
     </button>
     <button type="button" id="storyMiniStop" class="story-mini-stop">Stop</button>

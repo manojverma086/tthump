@@ -24,6 +24,44 @@
   let prefetchGeneration = 0;
   /** @type {Map<string, Promise<Blob>>} */
   const segmentBlobCache = new Map();
+  /** @type {{ currentTime: number, duration: number, segmentIndex: number, segmentCount: number }} */
+  let playbackProgress = {
+    currentTime: 0,
+    duration: 0,
+    segmentIndex: 0,
+    segmentCount: 0
+  };
+
+  function resetPlaybackProgress(segmentCount) {
+    playbackProgress = {
+      currentTime: 0,
+      duration: 0,
+      segmentIndex: 0,
+      segmentCount: segmentCount || 0
+    };
+  }
+
+  function emitPlaybackProgress(opts) {
+    if (opts && opts.onPlaybackProgress) {
+      opts.onPlaybackProgress({ ...playbackProgress });
+    }
+  }
+
+  function getPlaybackProgress() {
+    if (audioEl && isFinite(audioEl.duration) && audioEl.duration > 0) {
+      playbackProgress.currentTime = audioEl.currentTime;
+      playbackProgress.duration = audioEl.duration;
+    }
+    return { ...playbackProgress };
+  }
+
+  function reportSegmentProgress(opts, index, total) {
+    playbackProgress.segmentIndex = index;
+    playbackProgress.segmentCount = total;
+    playbackProgress.currentTime = index;
+    playbackProgress.duration = total;
+    emitPlaybackProgress(opts);
+  }
 
   function wait(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -197,6 +235,8 @@
   async function playFileUrl(url, segments, opts) {
     if (stopRequested) return;
 
+    resetPlaybackProgress(segments.length);
+
     return new Promise((resolve, reject) => {
       releaseAudioUrl();
       audioEl = new Audio(url);
@@ -209,11 +249,20 @@
         if (segments.length && audioEl.duration && isFinite(audioEl.duration)) {
           scheduleSegmentSync(segments, audioEl.duration, opts);
         }
+        playbackProgress.duration = audioEl.duration || 0;
+        emitPlaybackProgress(opts);
         if (opts.onPlaybackStart) opts.onPlaybackStart();
       };
 
       audioEl.onloadedmetadata = startSync;
       if (audioEl.readyState >= 1) startSync();
+
+      audioEl.ontimeupdate = () => {
+        if (stopRequested || !audioEl) return;
+        playbackProgress.currentTime = audioEl.currentTime;
+        playbackProgress.duration = audioEl.duration || playbackProgress.duration;
+        emitPlaybackProgress(opts);
+      };
 
       audioEl.onended = () => {
         audioEl = null;
@@ -294,11 +343,15 @@
     const isRhyme = opts.contentType === "rhyme";
     playing = true;
     stopRequested = false;
+    resetPlaybackProgress(segments.length);
 
     await wait(BEDTIME.introPauseMs);
+    if (opts.onPlaybackStart) opts.onPlaybackStart();
 
-    for (const seg of segments) {
+    for (let i = 0; i < segments.length; i++) {
       if (stopRequested) break;
+      const seg = segments[i];
+      reportSegmentProgress(opts, i, segments.length);
       if (opts.onSegment) opts.onSegment(seg);
       if (seg.letter && opts.onLetter) opts.onLetter(seg.letter);
       await speak(softenLine(seg.text), lang);
@@ -391,6 +444,7 @@
 
     playing = true;
     stopRequested = false;
+    resetPlaybackProgress(segments.length);
     const generation = prefetchGeneration;
 
     try {
@@ -456,6 +510,7 @@
         }
 
         const seg = segments[i];
+        reportSegmentProgress(opts, i, total);
         if (opts.onSegment) opts.onSegment(seg);
         if (seg.letter && opts.onLetter) opts.onLetter(seg.letter);
 
@@ -542,6 +597,7 @@
     stopRequested = true;
     playing = false;
     clearSyncTimers();
+    resetPlaybackProgress(0);
     if (window.speechSynthesis) speechSynthesis.cancel();
     if (audioEl) {
       audioEl.pause();
@@ -574,6 +630,7 @@
     playStory,
     stop,
     isPlaying,
+    getPlaybackProgress,
     prepareStoryInVoice,
     prefetchStory,
     buildNameParadeSegments,

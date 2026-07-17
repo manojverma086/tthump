@@ -438,9 +438,136 @@
   const storyMiniCaption = document.getElementById("storyMiniCaption");
   const storyMiniLabel = document.getElementById("storyMiniLabel");
   const storyMiniStop = document.getElementById("storyMiniStop");
+  const storyMiniProgressFill = document.getElementById("storyMiniProgressFill");
+  const rhymeStage = document.getElementById("rhymeStage");
+  const stageCharacter = document.getElementById("stageCharacter");
+  const stageLyric = document.getElementById("stageLyric");
+  const stageProgress = document.getElementById("stageProgress");
+  const stageProgressFill = document.getElementById("stageProgressFill");
+  const stageTime = document.getElementById("stageTime");
   let editingStoryId = null;
   let mergedStories = [];
   let storiesModalMinimized = false;
+  let playingStoryId = null;
+
+  const RHYME_EMOJI = {
+    "humpty-dumpty": "🥚",
+    "twinkle-star": "⭐",
+    "baa-baa-black-sheep": "🐑",
+    "row-your-boat": "🚣",
+    "itsy-bitsy-spider": "🕷️",
+    "nani-teri-morni": "🦚",
+    "chanda-mama": "🌙"
+  };
+
+  function rhymeEmojiFor(story) {
+    if (!story) return "🎵";
+    return RHYME_EMOJI[story.id] || "🎵";
+  }
+
+  function formatStageTime(seconds) {
+    if (!isFinite(seconds) || seconds <= 0) return "";
+    const s = Math.floor(seconds % 60);
+    const m = Math.floor(seconds / 60);
+    return m + ":" + String(s).padStart(2, "0");
+  }
+
+  function playbackPercent(progress) {
+    if (!progress) return 0;
+    if (progress.duration > 0 && isFinite(progress.duration)) {
+      return Math.min(100, Math.max(0, (progress.currentTime / progress.duration) * 100));
+    }
+    if (progress.segmentCount > 0) {
+      return Math.min(
+        100,
+        Math.max(0, (progress.segmentIndex / progress.segmentCount) * 100)
+      );
+    }
+    return 0;
+  }
+
+  function applyPlaybackProgress(progress) {
+    const pct = playbackPercent(progress);
+    if (stageProgressFill) stageProgressFill.style.width = pct + "%";
+    if (stageProgress) stageProgress.setAttribute("aria-valuenow", String(Math.round(pct)));
+    if (storyMiniProgressFill) storyMiniProgressFill.style.width = pct + "%";
+    if (stageTime && progress) {
+      const hasClock =
+        progress.duration > 0 &&
+        isFinite(progress.duration) &&
+        progress.duration > progress.segmentCount;
+      stageTime.textContent = hasClock
+        ? formatStageTime(progress.currentTime) + " / " + formatStageTime(progress.duration)
+        : progress.segmentCount > 0
+          ? progress.segmentIndex + 1 + " / " + progress.segmentCount
+          : "";
+    }
+  }
+
+  function enterStageMode(story) {
+    if (!rhymeStage || !stage) return;
+    playingStoryId = story ? story.id : null;
+    renderStoryList();
+    stage.classList.add("stage-is-live");
+    document.body.classList.add("stage-is-live");
+    rhymeStage.hidden = false;
+    if (stageCharacter) {
+      stageCharacter.textContent = rhymeEmojiFor(story);
+      stageCharacter.classList.add("is-playing");
+    }
+    const miniIcon = document.querySelector(".story-mini-icon");
+    if (miniIcon && !STORIES_ENABLED) {
+      miniIcon.textContent = rhymeEmojiFor(story);
+    }
+    if (stageLyric) stageLyric.textContent = "";
+    if (stageProgress) {
+      stageProgress.setAttribute(
+        "aria-label",
+        TapRoarLocale.t("stageProgress") || "Playback progress"
+      );
+    }
+    applyPlaybackProgress({ currentTime: 0, duration: 0, segmentIndex: 0, segmentCount: 0 });
+  }
+
+  function exitStageMode() {
+    playingStoryId = null;
+    renderStoryList();
+    if (stage) {
+      stage.classList.remove("stage-is-live");
+    }
+    document.body.classList.remove("stage-is-live");
+    if (rhymeStage) rhymeStage.hidden = true;
+    if (stageCharacter) stageCharacter.classList.remove("is-playing");
+    if (stageLyric) {
+      stageLyric.textContent = "";
+      stageLyric.classList.remove("is-changing");
+    }
+    if (stageProgressFill) stageProgressFill.style.width = "0%";
+    if (stageTime) stageTime.textContent = "";
+    if (storyMiniProgressFill) storyMiniProgressFill.style.width = "0%";
+    const miniIcon = document.querySelector(".story-mini-icon");
+    if (miniIcon) miniIcon.textContent = STORIES_ENABLED ? "📖" : "🎵";
+  }
+
+  function updateStageLyric(text) {
+    if (!stageLyric || !text) return;
+    stageLyric.textContent = text;
+    stageLyric.classList.remove("is-changing");
+    void stageLyric.offsetWidth;
+    stageLyric.classList.add("is-changing");
+  }
+
+  function clearPlayingState() {
+    exitStageMode();
+    hideStoryMiniPlayer();
+    showIdleState();
+  }
+
+  function miniPlayerLabel() {
+    return STORIES_ENABLED
+      ? TapRoarLocale.t("storyMiniPlaying")
+      : TapRoarLocale.t("rhymeMiniPlaying");
+  }
 
   let selectedVoiceId = "default";
   let selectedStoryId = null;
@@ -475,7 +602,7 @@
     if (!STORIES_ENABLED) {
       storyEditBtn.hidden = true;
       const miniLabel = document.getElementById("storyMiniLabel");
-      if (miniLabel) miniLabel.textContent = TapRoarLocale.t("rhymeMiniPlaying");
+      if (miniLabel) miniLabel.textContent = miniPlayerLabel();
     }
   }
 
@@ -493,7 +620,7 @@
       "aria-label",
       active ? TapRoarLocale.t("storiesCloseHide") : TapRoarLocale.t("storiesClose")
     );
-    storyMiniLabel.textContent = TapRoarLocale.t("storyMiniPlaying");
+    storyMiniLabel.textContent = miniPlayerLabel();
     storyMiniExpand.setAttribute("aria-label", TapRoarLocale.t("storyMiniExpand"));
     storyMiniStop.textContent = TapRoarLocale.t("storyMiniStop");
     syncStoryMiniPlayer();
@@ -505,11 +632,15 @@
     storyMiniPlayer.hidden = !shouldShow;
     if (!shouldShow) {
       storyMiniCaption.textContent = "";
+      if (storyMiniProgressFill) storyMiniProgressFill.style.width = "0%";
       if (!isStorySessionActive()) {
         storiesModalMinimized = false;
       }
     } else {
       storyMiniCaption.textContent = storyCaption.textContent || "";
+      if (TapRoarStories.getPlaybackProgress) {
+        applyPlaybackProgress(TapRoarStories.getPlaybackProgress());
+      }
     }
   }
 
@@ -586,6 +717,7 @@
     hideVoiceCloneStatus();
     setStoryBusy(false);
     storyCaption.textContent = "";
+    exitStageMode();
   }
 
   function applyUiStrings() {
@@ -832,20 +964,26 @@
     storyListEl.innerHTML = "";
     if (!mergedStories.length) return;
     mergedStories.forEach((story) => {
+      const isPlaying = playingStoryId === story.id;
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className =
         "story-item" +
         (selectedStoryId === story.id ? " selected" : "") +
         (story.custom ? " story-item--custom" : "") +
-        (story.type === "rhyme" ? " story-item--rhyme" : "");
+        (story.type === "rhyme" ? " story-item--rhyme" : "") +
+        (isPlaying ? " story-item--playing" : "");
       const hasAudio =
         story.audio &&
         (typeof story.audio === "string" ||
           Object.values(story.audio).some(Boolean));
       const titlePrefix = story.type === "rhyme" ? "🎵 " : hasAudio ? "🔊 " : "";
+      const eqMarkup = isPlaying
+        ? '<span class="story-eq" aria-hidden="true"><span class="story-eq-bar"></span><span class="story-eq-bar"></span><span class="story-eq-bar"></span></span>'
+        : "";
       btn.innerHTML =
         '<span class="story-item-title">' +
+        eqMarkup +
         titlePrefix +
         story.title +
         '</span><span class="story-item-source">' +
@@ -937,7 +1075,7 @@
     storyCaption.textContent = "";
     hideVoiceCloneStatus();
     setStoryBusy(false);
-    hideStoryMiniPlayer();
+    clearPlayingState();
     updateStoryChrome();
   });
 
@@ -1127,6 +1265,9 @@
     localStorage.setItem(CHILD_NAME_KEY, childNameInput.value.trim());
     storyStopBtn.hidden = false;
     storyCaption.textContent = "";
+    enterStageMode(story);
+    hideStoriesModalShell();
+    storiesModalMinimized = true;
     updateStoryChrome();
 
     if (effectiveVoiceId() !== "default") {
@@ -1152,16 +1293,24 @@
       },
       onPlaybackStart: () => {
         hideVoiceCloneStatus();
+        minimizeStoriesModal();
+        if (storyMiniStop && storiesModalMinimized) {
+          storyMiniStop.focus({ preventScroll: true });
+        }
       },
       onSegment: (seg) => {
         syncStoryCaption(seg.text);
+        updateStageLyric(seg.text);
+      },
+      onPlaybackProgress: (progress) => {
+        applyPlaybackProgress(progress);
       },
       onProgress: applyVoiceCloneProgress,
       onDone: () => {
         storyStopBtn.hidden = true;
         hideVoiceCloneStatus();
         setStoryBusy(false);
-        hideStoryMiniPlayer();
+        clearPlayingState();
         updateStoryChrome();
         updateRecordHint();
       },
@@ -1169,7 +1318,7 @@
         hideVoiceCloneStatus();
         setStoryBusy(false);
         syncStoryCaption(msg);
-        hideStoryMiniPlayer();
+        clearPlayingState();
         updateStoryChrome();
       }
     });
@@ -1181,7 +1330,7 @@
     storyCaption.textContent = "";
     hideVoiceCloneStatus();
     setStoryBusy(false);
-    hideStoryMiniPlayer();
+    clearPlayingState();
     updateStoryChrome();
   });
 

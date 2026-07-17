@@ -430,6 +430,183 @@ button { font-family: inherit; border: none; cursor: pointer; }
 }
 
 /* ---------------------------------------------------------
+   Stage Mode — rhyme karaoke overlay on the meadow
+   --------------------------------------------------------- */
+.rhyme-stage[hidden] {
+  display: none !important;
+}
+
+.rhyme-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2vh, 16px);
+  padding: 0 clamp(16px, 5vw, 32px);
+  pointer-events: none;
+}
+
+.stage-character {
+  font-size: clamp(72px, 22vw, 140px);
+  line-height: 1;
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.12));
+}
+
+.stage-character.is-playing {
+  animation: stageHop 1.4s ease-in-out infinite;
+}
+
+@keyframes stageHop {
+  0%, 100% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-10px) scale(1.04); }
+  50% { transform: translateY(0) scale(0.98); }
+  70% { transform: translateY(-5px) scale(1.02); }
+}
+
+.stage-lyric {
+  margin: 0;
+  max-width: min(92vw, 520px);
+  font-size: clamp(22px, 5.5vw, 36px);
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--ink);
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.65);
+  transition: opacity 0.2s ease;
+}
+
+.stage-lyric.is-changing {
+  animation: lyricPulse 0.35s ease;
+}
+
+@keyframes lyricPulse {
+  0% { opacity: 0.55; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.stage-progress-wrap {
+  width: min(88vw, 360px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.stage-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(61, 46, 92, 0.1);
+  overflow: hidden;
+}
+
+.stage-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--tangerine), var(--berry));
+  transition: width 0.15s linear;
+}
+
+.stage-time {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  opacity: 0.55;
+  text-align: center;
+}
+
+/* Meadow reacts when rhyme/story is playing on stage */
+.stage-is-live .little-sun {
+  animation: bob 4s ease-in-out infinite, stageSunPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes stageSunPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 211, 77, 0.35); transform: scale(1); }
+  50% { box-shadow: 0 0 18px 6px rgba(255, 211, 77, 0.45); transform: scale(1.06); }
+}
+
+.stage-is-live .grass {
+  filter: brightness(1.05) saturate(1.06);
+  transition: filter 0.4s ease;
+}
+
+.stage-is-live .keyboard {
+  opacity: 0.4;
+  transition: opacity 0.35s ease;
+}
+
+.stage-is-live .show .animal-card,
+.stage-is-live .show .idle-prompt,
+.stage-is-live .show .speech-bubble {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.stage-is-live .meadow-flowers {
+  opacity: 0.85;
+}
+
+/* Story list — now playing indicator */
+.story-item--playing {
+  border-color: var(--berry);
+  background: linear-gradient(135deg, #fff5f8 0%, #fffaf3 100%);
+}
+
+.story-item--playing .story-item-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.story-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.story-eq-bar {
+  display: block;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--berry);
+  animation: eqBounce 0.9s ease-in-out infinite;
+}
+
+.story-eq-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+.story-eq-bar:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+.story-eq-bar:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+
+@keyframes eqBounce {
+  0%, 100% { transform: scaleY(0.45); }
+  50% { transform: scaleY(1); }
+}
+
+.story-mini-progress {
+  display: block;
+  height: 4px;
+  margin-top: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+}
+
+.story-mini-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  transition: width 0.15s linear;
+}
+
+/* ---------------------------------------------------------
    Grass + keyboard
    --------------------------------------------------------- */
 .grass {
@@ -1111,5 +1288,9 @@ button { font-family: inherit; border: none; cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
   .sun-button, .little-sun, .cloud-a, .cloud-b, .cloud-c,
-  .sun-rays, .tap-ring, .idle-prompt, .animal-card.idle { animation: none !important; }
+  .sun-rays, .tap-ring, .idle-prompt, .animal-card.idle,
+  .stage-character.is-playing, .stage-lyric.is-changing,
+  .story-eq-bar, .stage-is-live .little-sun { animation: none !important; }
+  .stage-is-live .grass { transition: none; filter: none; }
+  .stage-progress-fill, .story-mini-progress-fill { transition: none; }
 }
