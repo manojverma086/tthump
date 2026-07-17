@@ -16,6 +16,18 @@ Audio files are downloaded by `npm run fetch-audio` from [Internet Archive](http
 
 Historical **78rpm** children’s recordings are generally public domain in the United States. Hindi community uploads may have unclear rights — replace with your own recordings for commercial release if needed.
 
+## Production (rhymes-only)
+
+| Content | Risk for a free hobby site (e.g. GitHub Pages) | Notes |
+|---------|--------------------------------------------------|-------|
+| Nursery rhyme **lyrics** (Twinkle, Humpty, etc.) | Low | Traditional; widely treated as public domain |
+| English **78rpm** rhyme audio | Low–medium | Pre-1928 US recordings; keep links in this file |
+| **Itsy Bitsy Spider** (community Archive upload) | Medium | Not a verified 78rpm label release — prefer your own recording before monetizing |
+| Hindi **nani-teri-morni** / **chanda-mama** (community uploads) | Medium–high | Rights unclear in India; fine for personal/demo; re-record or license for a paid app |
+| **Story** text/audio (currently hidden in app) | N/A until re-enabled | Aesop plots are PD; specific recordings have separate rights |
+
+This is not legal advice. For a commercial product, have a lawyer review or use only audio you recorded or licensed (e.g. Sleepytale exports in `audio/generated/`).
+
 Entries **without** an `audio` field in `stories/*.json` still use gentle browser TTS.
 
 To refresh files: `npm run fetch-audio`

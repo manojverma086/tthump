@@ -336,6 +336,8 @@
   // ---- Stories: locale pack, family voices, name parade ----
   /** Re-enable when voice-api + XTTS hosting is deployed. */
   const FAMILY_VOICE_ENABLED = false;
+  /** Full bedtime stories (TTS / story audio). Off until narration quality is ready. */
+  const STORIES_ENABLED = false;
 
   const storiesBtn = document.getElementById("storiesBtn");
   const storiesModal = document.getElementById("storiesModal");
@@ -466,6 +468,17 @@
     }
   }
 
+  function applyRhymesOnlyUi() {
+    const nameField = childNameInput.closest(".stories-field");
+    if (nameField) nameField.hidden = !STORIES_ENABLED;
+    writeStoryBtn.hidden = !STORIES_ENABLED;
+    if (!STORIES_ENABLED) {
+      storyEditBtn.hidden = true;
+      const miniLabel = document.getElementById("storyMiniLabel");
+      if (miniLabel) miniLabel.textContent = TapRoarLocale.t("rhymeMiniPlaying");
+    }
+  }
+
   function effectiveVoiceId() {
     return FAMILY_VOICE_ENABLED ? selectedVoiceId : "default";
   }
@@ -577,7 +590,9 @@
 
   function applyUiStrings() {
     const t = TapRoarLocale.t;
-    document.getElementById("storiesTitle").textContent = t("storiesTitle");
+    document.getElementById("storiesTitle").textContent = STORIES_ENABLED
+      ? t("storiesTitle")
+      : t("rhymesTitle");
     document.getElementById("storiesLangLabel").textContent = t("languageLabel");
     document.getElementById("storiesNameLabel").textContent = t("childName");
     childNameInput.placeholder = t("childNamePlaceholder");
@@ -588,7 +603,7 @@
       addVoiceBtn.textContent = t("voiceAdd");
       recordHint.textContent = t("voiceRecordHint");
     }
-    storyPlayBtn.textContent = t("play");
+    storyPlayBtn.textContent = STORIES_ENABLED ? t("play") : t("playRhyme");
     storyStopBtn.textContent = t("stop");
     document.getElementById("voiceSetupTitle").textContent = t("voiceSetupTitle");
     document.getElementById("voiceSetupHint").textContent = t("voiceSetupHint");
@@ -614,11 +629,17 @@
     writeStoryBtn.textContent = t("writeStory");
     storyEditBtn.textContent = t("storyEdit");
     document.querySelectorAll(".stories-launch-text").forEach((el) => {
-      const label = t("storiesLaunch");
-      el.textContent = label === "storiesLaunch" ? "Stories & voices" : label;
+      const label = STORIES_ENABLED ? t("storiesLaunch") : t("rhymesLaunch");
+      el.textContent =
+        label === "storiesLaunch" || label === "rhymesLaunch"
+          ? STORIES_ENABLED
+            ? "Stories & voices"
+            : "Rhymes & songs"
+          : label;
     });
     updateStoryChrome();
     applyFamilyVoiceUi();
+    applyRhymesOnlyUi();
   }
 
   function showVoiceSetup(show) {
@@ -781,14 +802,17 @@
 
   async function buildStoryList() {
     const pack = TapRoarLocale.pack;
-    if (!pack || !pack.stories) return [];
+    if (!pack) return [];
     const rhymeLabel = TapRoarLocale.t("rhymeSource");
-    const stories = pack.stories.filter((s) => s.type !== "name-parade");
     const rhymes = (pack.rhymes || []).map((r) => ({
       ...r,
       type: "rhyme",
       source: r.source || rhymeLabel
     }));
+    if (!STORIES_ENABLED) return rhymes;
+
+    if (!pack.stories) return rhymes;
+    const stories = pack.stories.filter((s) => s.type !== "name-parade");
     const nameParade = pack.stories.find((s) => s.type === "name-parade");
     const custom = await TapRoarCustomStories.listAsStories();
     const all = [...stories, ...rhymes, ...custom];
@@ -796,6 +820,10 @@
   }
 
   function updateStoryEditBtn() {
+    if (!STORIES_ENABLED) {
+      storyEditBtn.hidden = true;
+      return;
+    }
     const story = mergedStories.find((s) => s.id === selectedStoryId);
     storyEditBtn.hidden = !(story && story.custom);
   }
