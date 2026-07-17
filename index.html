@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<!-- Bump ASSET_VERSION after CSS/JS changes (Cloudflare caches static files). -->
+<link rel="stylesheet" href="style.css?v=2">
 
 <!-- ===================== ANALYTICS (privacy-friendly, no cookies) =====================
      Sign up free at https://www.cloudflare.com/web-analytics/ then paste your own
@@ -39,8 +40,8 @@
       <p class="splash-sub">Tap the sun to play!</p>
     </div>
     <button id="storiesSplashBtn" class="stories-launch stories-launch--splash" type="button">
-      <span class="stories-launch-icon" aria-hidden="true">📖</span>
-      <span class="stories-launch-text">Stories &amp; voices</span>
+      <span class="stories-launch-icon" aria-hidden="true">🎵</span>
+      <span class="stories-launch-text">Rhymes &amp; songs</span>
     </button>
   </div>
 
@@ -92,8 +93,8 @@
     <section class="grass">
       <div class="meadow-flowers" aria-hidden="true"></div>
       <button id="storiesBtn" class="stories-launch stories-launch--meadow" type="button" aria-haspopup="dialog" aria-controls="storiesModal">
-        <span class="stories-launch-icon" aria-hidden="true">📖</span>
-        <span class="stories-launch-text">Stories &amp; voices</span>
+        <span class="stories-launch-icon" aria-hidden="true">🎵</span>
+        <span class="stories-launch-text">Rhymes &amp; songs</span>
       </button>
       <div id="keyboard" class="keyboard" role="group" aria-label="Letter buttons"></div>
     </section>
@@ -241,15 +242,15 @@
     <button type="button" id="storyMiniStop" class="story-mini-stop">Stop</button>
   </div>
 
-  <script src="js/legacy-cache-cleanup.js"></script>
-  <script src="js/voice-api-client.js"></script>
-  <script src="js/voice-clone-audio.js"></script>
-  <script src="js/mic.js"></script>
-  <script src="js/locale.js"></script>
-  <script src="js/voices.js"></script>
-  <script src="js/custom-stories.js"></script>
-  <script src="js/story-audio.js"></script>
-  <script src="js/stories.js"></script>
-  <script src="script.js"></script>
+  <script src="js/legacy-cache-cleanup.js?v=2"></script>
+  <script src="js/voice-api-client.js?v=2"></script>
+  <script src="js/voice-clone-audio.js?v=2"></script>
+  <script src="js/mic.js?v=2"></script>
+  <script src="js/locale.js?v=2"></script>
+  <script src="js/voices.js?v=2"></script>
+  <script src="js/custom-stories.js?v=2"></script>
+  <script src="js/story-audio.js?v=2"></script>
+  <script src="js/stories.js?v=2"></script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>
